@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sleep Control</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Timings</string>
+    <string name="title_section2">Sleep Now</string>
+    <string name="title_section3">Unused</string>
+
+    <string name="enable_timed_sleep_label">Enabled:</string>
+    <string name="start_sleep_time_label">Go to sleep at:</string>
+    <string name="end_sleep_time_label">Wake up at:</string>
+    <string name="start_daily_button_label">Start daily timings</string>
+    <string name="stop_daily_button_label">Stop all sleep control</string>
+    
+    <string name="delay_before_sleep_secs">Go to sleep in (n) seconds:</string>
+    <string name="delay_before_wake_secs">Wake up in (n) seconds:</string>
+    <string name="start_intervals_button_label">Start now (awake)</string>
+    <string name="stop_intervals_button_label">Stop all sleep control</string>
+    
+    <string name="prefs_current_tab">prefs_current_tab</string>
+    <string name="prefs_current_running_mode">prefs_current_running_mode</string>
+    <string name="prefs_enable_timed_sleep">prefs_enable_timed_sleep</string>
+    <string name="prefs_start_sleep_time_hours">prefs_start_sleep_time_hours</string>
+    <string name="prefs_start_sleep_time_minutes">prefs_start_sleep_time_minutes</string>
+    <string name="prefs_end_sleep_time_hours">prefs_end_sleep_time_hours</string>
+    <string name="prefs_end_sleep_time_minutes">prefs_end_sleep_time_minutes</string>
+    <string name="prefs_delay_before_wake_secs">prefs_delay_before_wake_secs</string>
+    <string name="prefs_delay_before_sleep_secs">prefs_delay_before_sleep_secs</string>
+    
+    <string name="local_service_label">Sleep Control Service</string>
+    <string name="local_service_started">Sleep Control Service is running</string>
+</resources>
