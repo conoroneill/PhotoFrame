@@ -14,7 +14,7 @@ public class SleepNotifications {
     // We use it on Notification start, and to cancel it.
     private int NOTIFICATION = R.string.local_service_started;
 
-    private NotificationManager mNM;
+    private NotificationManager nm;
     
     public SleepNotifications() {
     }
@@ -23,11 +23,11 @@ public class SleepNotifications {
      * Show a notification while this service is running.
      */
     public void showNotification(Context context) {
-        if (mNM != null) {
+        if (nm != null) {
             return; //already done
         }
         Log.d(SleepLogging.TAG, "Showing notification...");
-        mNM = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = context.getText(R.string.local_service_started);
 
@@ -44,7 +44,20 @@ public class SleepNotifications {
                        text, contentIntent);
 
         // Send the notification.
-        mNM.notify(NOTIFICATION, notification);
+        nm.notify(NOTIFICATION, notification);
         Log.i(SleepLogging.TAG, "Showing notification; done");
+    }
+
+    /**
+     * Clear the notification.
+     */
+    public void clearNotification(Context context) {
+        if (nm == null) {
+            return; //already done
+        }
+        Log.d(SleepLogging.TAG, "Clearing notification...");
+        nm.cancel(NOTIFICATION);
+        nm = null;
+        Log.i(SleepLogging.TAG, "Clearing notification; done");
     }
 }

@@ -129,6 +129,14 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
         calendar.set(Calendar.MINUTE, minutes);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
+        
+        long now = System.currentTimeMillis();
+        long then = calendar.getTimeInMillis();
+        if (now > then) {
+            // the trigger time is earlier in the day than 'now', so we must mean tomorrow
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+            Log.i(SleepLogging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; hours:mins: " + hours + ":" + minutes + " TOMORROW!");
+        }
 
         // Set the alarm to fire at the specified time, according to the device's
         // clock, and to repeat once a day.

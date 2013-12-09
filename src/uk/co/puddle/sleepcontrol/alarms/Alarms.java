@@ -39,7 +39,7 @@ public class Alarms {
         SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         RunningMode currentRunningMode = RunningMode.fromStorageValue(sharedPref.getInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue()));
         if (currentRunningMode != RunningMode.STOPPED) {
-            stopAlarms(context);
+            stopAlarms0(context);
         }
         Log.d(SleepLogging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -66,6 +66,11 @@ public class Alarms {
     }
 
     public static void stopAlarms(Context context) {
+        stopAlarms0(context);
+        notifications.clearNotification(context);
+    }
+    
+    private static void stopAlarms0(Context context) {
         SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         RunningMode currentRunningMode = RunningMode.fromStorageValue(sharedPref.getInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue()));
         if (currentRunningMode != RunningMode.STOPPED) {
@@ -121,8 +126,8 @@ public class Alarms {
     }
     
     private static void startInWakeMode(Context context) {
-        Log.i(SleepLogging.TAG, "Alarms; startInWakeMode; sending action: " + SleepAction.WAKE_UP_SCREEN);
-        Intent intent = new Intent(SleepAction.WAKE_UP_SCREEN.getActionName(),null,context,SleepIntentService.class); 
+        Log.i(SleepLogging.TAG, "Alarms; startInWakeMode; sending action: " + SleepAction.INIT_WAKE_UP);
+        Intent intent = new Intent(SleepAction.INIT_WAKE_UP.getActionName(),null,context,SleepIntentService.class); 
         context.startService(intent);
     }
     private static void releaseLocks(Context context) {

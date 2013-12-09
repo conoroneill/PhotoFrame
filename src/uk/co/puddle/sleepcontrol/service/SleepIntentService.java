@@ -41,26 +41,30 @@ public class SleepIntentService extends IntentService {
         //Log.i(SleepLogging.TAG, "Inside sleep thread; action: " + action);
         switch(sleepAction) {
         case WAKE_UP_SCREEN:
-            doWakeUpScreen(intent);
+        case INIT_WAKE_UP:
+            doWakeUpScreen(intent, sleepAction);
             break;
         case SNOOZE_SCREEN:
-            doSnoozeScreen(intent);
+            doSnoozeScreen(intent, sleepAction);
             break;
         case RELEASE_LOCKS:
-            releaseLocks();
+            releaseLocks(sleepAction);
             break;
         case UNKNOWN:
+        case RELEASE_COS_RUNMODE_STOPPED:
+        case RELEASE_COS_ABOUT_TO_ACQUIRE:
+            Log.w(SleepLogging.TAG, "Received unexpected action: " + sleepAction + "(" + action + ")");
             break;
         }
         //Log.i(SleepLogging.TAG, "Exiting sleep thread");
     }
     
-    protected void doWakeUpScreen(Intent intent) {
-        Log.d(SleepLogging.TAG, "doWakeUpScreen");
+    protected void doWakeUpScreen(Intent intent, SleepAction triggeredByAction) {
+        Log.d(SleepLogging.TAG, "doWakeUpScreen (" + triggeredByAction + ")");
         RunningMode runningMode = SleepPrefs.getCurrentRunningMode(this);
         if (runningMode == RunningMode.STOPPED) {
             // Belt and braces; if we are in the middle of something when we shut this down, then release all
-            releaseLocks();
+            releaseLocks(SleepAction.RELEASE_COS_RUNMODE_STOPPED);
             return;
         }
         //Toast.makeText(this, "SleepIntentService WAKE", Toast.LENGTH_SHORT).show();
@@ -68,7 +72,7 @@ public class SleepIntentService extends IntentService {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         if (wl != null) {
             // belt and braces - should not be needed - make sure we release any old locks!
-            releaseLocks();
+            releaseLocks(SleepAction.RELEASE_COS_ABOUT_TO_ACQUIRE);
         }
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(
@@ -77,24 +81,24 @@ public class SleepIntentService extends IntentService {
                   ,
                 SleepLogging.TAG);
         wl.acquire();
-        Log.d(SleepLogging.TAG, "doWakeUpScreen; acquired lock: " + wl.toString());
-        Log.i(SleepLogging.TAG, "doWakeUpScreen; acquired lock");
+        Log.d(SleepLogging.TAG, "doWakeUpScreen; acquired lock: " + wl.toString() + ", due to: " + triggeredByAction);
+        Log.i(SleepLogging.TAG, "doWakeUpScreen; acquired lock (" + triggeredByAction + ")");
         
         //pm.wakeUp(SystemClock.uptimeMillis());
     }
 
-    protected void doSnoozeScreen(Intent intent) {
-        Log.d(SleepLogging.TAG, "doSnoozeScreen");
+    protected void doSnoozeScreen(Intent intent, SleepAction triggeredByAction) {
+        Log.d(SleepLogging.TAG, "doSnoozeScreen (" + triggeredByAction + ")");
         RunningMode runningMode = SleepPrefs.getCurrentRunningMode(this);
         if (runningMode == RunningMode.STOPPED) {
             // Belt and braces; if we are in the middle of something when we shut this down, then release all
-            releaseLocks();
+            releaseLocks(SleepAction.RELEASE_COS_RUNMODE_STOPPED);
             return;
         }
         if (wl != null) {
-            Log.d(SleepLogging.TAG, "doSnoozeScreen; releasing lock: " + wl.toString() + " ...");
+            Log.d(SleepLogging.TAG, "doSnoozeScreen; releasing lock: " + wl.toString() + ", due to: " + triggeredByAction + " ...");
             wl.release();
-            Log.i(SleepLogging.TAG, "doSnoozeScreen; released lock");
+            Log.i(SleepLogging.TAG, "doSnoozeScreen; released lock (" + triggeredByAction + ")");
             wl = null;
         }
         
@@ -105,9 +109,9 @@ public class SleepIntentService extends IntentService {
         //Log.i(SleepLogging.TAG, "Exiting doAlarmOff");
     }
     
-    private void releaseLocks() {
+    private void releaseLocks(SleepAction triggeredByAction) {
         if (wl != null) {
-            Log.i(SleepLogging.TAG, "releaseLocks; releasing: " + wl.toString() + " ...");
+            Log.i(SleepLogging.TAG, "releaseLocks; releasing: " + wl.toString() + ", due to: " + triggeredByAction + " ...");
             wl.release();
             wl = null;
         } else {
