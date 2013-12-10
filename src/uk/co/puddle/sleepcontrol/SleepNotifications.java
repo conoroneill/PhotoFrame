@@ -32,7 +32,7 @@ public class SleepNotifications {
         CharSequence text = context.getText(R.string.local_service_started);
 
         // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.ic_launcher, text,
+        Notification notification = new Notification(R.drawable.face_sleep, text,
                 System.currentTimeMillis());
 
         // The PendingIntent to launch our activity if the user selects this notification
