@@ -4,8 +4,6 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -72,8 +70,7 @@ public class SleepControlActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-        SharedPreferences sharedPref = this.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        int tabPosition = sharedPref.getInt(getString(R.string.prefs_current_tab),  0);
+        int tabPosition = SleepPrefs.getIntPref(this, SleepPrefs.PREF_TAB_POSITION, 0);
         mViewPager.setCurrentItem(tabPosition);
 	}
 	
@@ -90,10 +87,7 @@ public class SleepControlActivity extends FragmentActivity implements
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
-        SharedPreferences sharedPref = this.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(getString(R.string.prefs_current_tab), tab.getPosition());
-        editor.commit();
+        SleepPrefs.setIntPref(this, SleepPrefs.PREF_TAB_POSITION, tab.getPosition());
         Log.d(SleepLogging.TAG, "selectedTab; set to: " + tab.getPosition());
 	}
 

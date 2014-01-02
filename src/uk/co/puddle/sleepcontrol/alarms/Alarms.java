@@ -2,7 +2,6 @@ package uk.co.puddle.sleepcontrol.alarms;
 
 import java.util.Calendar;
 
-import uk.co.puddle.sleepcontrol.R;
 import uk.co.puddle.sleepcontrol.RunningMode;
 import uk.co.puddle.sleepcontrol.SleepAction;
 import uk.co.puddle.sleepcontrol.SleepLogging;
@@ -11,7 +10,6 @@ import uk.co.puddle.sleepcontrol.SleepPrefs;
 import uk.co.puddle.sleepcontrol.service.SleepIntentService;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.util.Log;
 
 public class Alarms {
@@ -29,22 +27,18 @@ public class Alarms {
     }
 
     public static void startAlarmsInCurrentMode(Context context) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        RunningMode currentRunningMode = RunningMode.fromStorageValue(sharedPref.getInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue()));
+        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
         Log.i(SleepLogging.TAG, "Alarms; startAlarmsInCurrentMode: currentRunningMode: " + currentRunningMode);
         startAlarms(context, currentRunningMode);
     }
     
     public static void startAlarms(Context context, RunningMode runningMode) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        RunningMode currentRunningMode = RunningMode.fromStorageValue(sharedPref.getInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue()));
+        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
         if (currentRunningMode != RunningMode.STOPPED) {
             stopAlarms0(context);
         }
         Log.d(SleepLogging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putInt(context.getString(R.string.prefs_current_running_mode), runningMode.getStorageValue());
-        editor.commit();
+        SleepPrefs.setIntPref(context, SleepPrefs.PREF_RUNNING_MODE, runningMode.getStorageValue());
 //        Log.d(SleepLogging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
         switch(runningMode) {
         case STOPPED:
@@ -71,26 +65,22 @@ public class Alarms {
     }
     
     private static void stopAlarms0(Context context) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        RunningMode currentRunningMode = RunningMode.fromStorageValue(sharedPref.getInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue()));
+        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
         if (currentRunningMode != RunningMode.STOPPED) {
             wakeAlarm.cancelAlarm(context);
             snoozeAlarm.cancelAlarm(context);
             releaseLocks(context);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putInt(context.getString(R.string.prefs_current_running_mode), RunningMode.STOPPED.getStorageValue());
-            editor.commit();
+            SleepPrefs.setIntPref(context, SleepPrefs.PREF_RUNNING_MODE, RunningMode.STOPPED.getStorageValue());
             Log.i(SleepLogging.TAG, "Alarms; cleared all; running mode now: " + RunningMode.STOPPED);
         }
     }
     
     private static boolean checkForInitialWake(Context context) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        int snHours   = sharedPref.getInt(context.getString(R.string.prefs_start_sleep_time_hours), 18);
-        int snMinutes = sharedPref.getInt(context.getString(R.string.prefs_start_sleep_time_minutes), 0);
+        int snHours   = SleepPrefs.getIntPref(context, SleepPrefs.PREF_START_SLEEP_TIME_HOURS, 18);
+        int snMinutes = SleepPrefs.getIntPref(context, SleepPrefs.PREF_START_SLEEP_TIME_MINS, 0);
 
-        int wkHours   = sharedPref.getInt(context.getString(R.string.prefs_end_sleep_time_hours), 18);
-        int wkMinutes = sharedPref.getInt(context.getString(R.string.prefs_end_sleep_time_minutes), 0);
+        int wkHours   = SleepPrefs.getIntPref(context, SleepPrefs.PREF_END_SLEEP_TIME_HOURS, 18);
+        int wkMinutes = SleepPrefs.getIntPref(context, SleepPrefs.PREF_END_SLEEP_TIME_MINS, 0);
         
         Calendar snCalendar = getCalendar(snHours, snMinutes);
         Calendar wkCalendar = getCalendar(wkHours, wkMinutes);

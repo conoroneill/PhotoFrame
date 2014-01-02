@@ -1,15 +1,13 @@
 package uk.co.puddle.sleepcontrol;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -48,11 +46,8 @@ public class SleepTimingsFragment extends Fragment {
         startSleepTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker paramTimePicker, int hour, int minute) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.prefs_start_sleep_time_hours), hour);
-                editor.putInt(getString(R.string.prefs_start_sleep_time_minutes), minute);
-                editor.commit();
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_START_SLEEP_TIME_HOURS, hour);
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_START_SLEEP_TIME_MINS, minute);
                 Log.d(SleepLogging.TAG, "startSleepTimePicker; set to: " + hour + "; " + minute);
             }
         });
@@ -60,11 +55,8 @@ public class SleepTimingsFragment extends Fragment {
         endSleepTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
             public void onTimeChanged(TimePicker paramTimePicker, int hour, int minute) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.prefs_end_sleep_time_hours), hour);
-                editor.putInt(getString(R.string.prefs_end_sleep_time_minutes), minute);
-                editor.commit();
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_END_SLEEP_TIME_HOURS, hour);
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_END_SLEEP_TIME_MINS, minute);
                 Log.d(SleepLogging.TAG, "endSleepTimePicker; set to: " + hour + "; " + minute);
             }
         });
@@ -72,10 +64,7 @@ public class SleepTimingsFragment extends Fragment {
         enabledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putBoolean(getString(R.string.prefs_enable_timed_sleep), isChecked);
-                editor.commit();
+                SleepPrefs.setBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, isChecked);
                 Log.d(SleepLogging.TAG, "enabledCheckBox; set to: " + isChecked);
                 enableDisablePageElements(rootView, isChecked);
             }
@@ -97,26 +86,24 @@ public class SleepTimingsFragment extends Fragment {
             }
         });
 
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        boolean enabled = sharedPref.getBoolean(getString(R.string.prefs_enable_timed_sleep), false);
+        boolean enabled = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
         enabledCheckBox.setChecked(enabled);
         Log.d(SleepLogging.TAG, "enabledCheckBox; initialised to: " + enabled);
 
         initialiseTimePicker(startSleepTimePicker, "start",
-                R.string.prefs_start_sleep_time_hours,
-                R.string.prefs_start_sleep_time_minutes);
+                SleepPrefs.PREF_START_SLEEP_TIME_HOURS,
+                SleepPrefs.PREF_START_SLEEP_TIME_MINS);
         initialiseTimePicker(endSleepTimePicker, "end",
-                R.string.prefs_end_sleep_time_hours,
-                R.string.prefs_end_sleep_time_minutes);
+                SleepPrefs.PREF_END_SLEEP_TIME_HOURS,
+                SleepPrefs.PREF_END_SLEEP_TIME_MINS);
         
         enableDisablePageElements(rootView, enabled);
     }
     
     private void initialiseTimePicker(TimePicker timePicker, String desc,
-            int prefsKeyHours, int prefsKeyMinutes) {
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        int hour   = sharedPref.getInt(getString(prefsKeyHours), 18);
-        int minute = sharedPref.getInt(getString(prefsKeyMinutes), 0);
+            String prefsKeyHours, String prefsKeyMinutes) {
+        int hour   = SleepPrefs.getIntPref(getActivity(), prefsKeyHours, 18);
+        int minute = SleepPrefs.getIntPref(getActivity(), prefsKeyMinutes, 0);
         timePicker.setCurrentHour(hour);
         timePicker.setCurrentMinute(minute);
         Log.d(SleepLogging.TAG, "initialiseTimePicker; " + desc + "; "+ hour + "; " + minute);

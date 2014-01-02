@@ -1,8 +1,6 @@
 package uk.co.puddle.sleepcontrol;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -46,10 +44,7 @@ public class SleepNowFragment extends Fragment {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 delayBeforeSleep = newVal;
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.prefs_delay_before_sleep_secs), newVal);
-                editor.commit();
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
                 Log.d(SleepLogging.TAG, "delayBeforeSleepNumberPicker; set to: " + delayBeforeSleep);
             }
         });
@@ -58,10 +53,7 @@ public class SleepNowFragment extends Fragment {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 delayBeforeWake = newVal;
-                SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt(getString(R.string.prefs_delay_before_wake_secs), newVal);
-                editor.commit();
+                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_WAKE, delayBeforeWake);
                 Log.d(SleepLogging.TAG, "delayBeforeWakeNumberPicker; set to: " + delayBeforeWake);
             }
         });
@@ -82,9 +74,8 @@ public class SleepNowFragment extends Fragment {
             }
         });
 
-        SharedPreferences sharedPref = getActivity().getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
-        delayBeforeSleep = sharedPref.getInt(getString(R.string.prefs_delay_before_sleep_secs), delayBeforeSleep);
-        delayBeforeWake  = sharedPref.getInt(getString(R.string.prefs_delay_before_wake_secs), delayBeforeWake);
+        delayBeforeSleep = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
+        delayBeforeWake  = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_WAKE,  delayBeforeWake);
         Log.d(SleepLogging.TAG, "delayBeforeSleepNumberPicker; init: " + delayBeforeSleep);
         Log.d(SleepLogging.TAG, "delayBeforeWakeNumberPicker; init: " + delayBeforeWake);
         delayBeforeSleepNumberPicker.setMinValue(0);
