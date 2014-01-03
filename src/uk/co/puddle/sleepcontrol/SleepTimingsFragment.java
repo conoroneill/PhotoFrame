@@ -1,6 +1,7 @@
 package uk.co.puddle.sleepcontrol;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
+import uk.co.puddle.sleepcontrol.photos.PhotoReader;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -130,5 +131,7 @@ public class SleepTimingsFragment extends Fragment {
     private void stopSleep() {
         Log.i(SleepLogging.TAG, "SleepTimingsFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
+        
+        new PhotoReader().list();
     }
 }
