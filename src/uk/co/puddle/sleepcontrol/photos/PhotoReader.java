@@ -1,10 +1,10 @@
 package uk.co.puddle.sleepcontrol.photos;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 
 import uk.co.puddle.sleepcontrol.SleepLogging;
-
+import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
@@ -20,14 +20,19 @@ public class PhotoReader {
         return false;
     }
     
-    public void list() {
+    public void list(Context context) {
         boolean readable = isExternalStorageReadable();
         Log.i(SleepLogging.TAG, "PhotoReader: readable: " + readable);
         if (!readable) {
 //            return;
         }
+        File dir = Environment.getExternalStorageDirectory();
+        Log.i(SleepLogging.TAG, "PhotoReader: externalDirName: dir: " + dir);
         listSubDir(Environment.DIRECTORY_PICTURES);
         listSubDir(Environment.DIRECTORY_MUSIC);
+        listSubDir(Environment.DIRECTORY_DCIM);
+        
+        List<String> images = PhotoHelper1.getCameraImages(context);
     }
 
     private void listSubDir(String subDirName) {

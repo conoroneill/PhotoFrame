@@ -132,6 +132,6 @@ public class SleepTimingsFragment extends Fragment {
         Log.i(SleepLogging.TAG, "SleepTimingsFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
         
-        new PhotoReader().list();
+        new PhotoReader().list(getActivity());
     }
 }
