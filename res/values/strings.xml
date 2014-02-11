@@ -3,9 +3,12 @@
 
     <string name="app_name">Sleep Control</string>
     <string name="action_settings">Settings</string>
-    <string name="title_tab0">Timings</string>
-    <string name="title_tab1">Sleep Now</string>
+    <string name="title_tab0">Front</string>
+    <string name="title_tab1">Timings</string>
+    <string name="title_tab2">Sleep Now</string>
 
+    <string name="front_page_text">This is the front page</string>
+    
     <string name="enable_timed_sleep_label">Enabled:</string>
     <string name="start_sleep_time_label">Go to sleep at:</string>
     <string name="end_sleep_time_label">Wake up at:</string>

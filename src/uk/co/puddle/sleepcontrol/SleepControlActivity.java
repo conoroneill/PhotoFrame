@@ -118,12 +118,20 @@ public class SleepControlActivity extends FragmentActivity implements
 			// below) with the page number as its lone argument.
 			Fragment fragment = null;
 			String argName = null;
-			if (position == 0) {
-			    fragment = new SleepTimingsFragment();
-			    argName = SleepTimingsFragment.ARG_SECTION_NUMBER;
-			} else {
+			switch(position) {
+			case 0:
+                fragment = new SleepFrontFragment();
+                argName = SleepFrontFragment.ARG_SECTION_NUMBER;
+                break;
+			case 1:
+                fragment = new SleepTimingsFragment();
+                argName = SleepTimingsFragment.ARG_SECTION_NUMBER;
+                break;
+			case 2:
                 fragment = new SleepNowFragment();
                 argName = SleepNowFragment.ARG_SECTION_NUMBER;
+                break;
+			default:
 			}
 			Bundle args = new Bundle();
 			args.putInt(argName, position + 1);
@@ -134,7 +142,7 @@ public class SleepControlActivity extends FragmentActivity implements
 		@Override
 		public int getCount() {
 			// Show total pages.
-			return 2;
+			return 3;
 		}
 
 		@Override
@@ -145,8 +153,8 @@ public class SleepControlActivity extends FragmentActivity implements
 				return getString(R.string.title_tab0).toUpperCase(l);
 			case 1:
 				return getString(R.string.title_tab1).toUpperCase(l);
-			//case 2:
-			//	return getString(R.string.title_section3).toUpperCase(l);
+			case 2:
+				return getString(R.string.title_tab2).toUpperCase(l);
 			}
 			return null;
 		}
