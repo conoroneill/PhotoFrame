@@ -1,7 +1,10 @@
 package uk.co.puddle.sleepcontrol;
 
-import uk.co.puddle.sleepcontrol.alarms.Alarms;
+import java.util.List;
+
+import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
 import uk.co.puddle.sleepcontrol.photos.PhotoReader;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,11 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 public class SleepFrontFragment extends Fragment {
 
@@ -24,114 +23,70 @@ public class SleepFrontFragment extends Fragment {
      */
     public static final String ARG_SECTION_NUMBER = "section_number";
 
+    private List<PhotoEntry> images;
+
     public SleepFrontFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment_front, container, false);
-//        TextView dummyTextView = (TextView) rootView
-//                .findViewById(R.id.section_label);
-//        dummyTextView.setText(Integer.toString(getArguments().getInt(
-//                ARG_SECTION_NUMBER)));
         
-//        hookupTimePickers(rootView);
+        View rootView = inflater.inflate(R.layout.fragment_front, container, false);
+        hookupButtons(rootView);
+        refreshPhotos();
+        refreshTextWindow(rootView);
 
         return rootView;
     }
-
-    private void hookupTimePickers(final View rootView) {
-        TimePicker startSleepTimePicker = (TimePicker) rootView.findViewById(R.id.startSleepTimePicker);
-        startSleepTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker paramTimePicker, int hour, int minute) {
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_START_SLEEP_TIME_HOURS, hour);
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_START_SLEEP_TIME_MINS, minute);
-                Log.d(SleepLogging.TAG, "startSleepTimePicker; set to: " + hour + "; " + minute);
-            }
-        });
-        TimePicker endSleepTimePicker = (TimePicker) rootView.findViewById(R.id.endSleepTimePicker);
-        endSleepTimePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker paramTimePicker, int hour, int minute) {
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_END_SLEEP_TIME_HOURS, hour);
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_END_SLEEP_TIME_MINS, minute);
-                Log.d(SleepLogging.TAG, "endSleepTimePicker; set to: " + hour + "; " + minute);
-            }
-        });
-        CheckBox enabledCheckBox = (CheckBox)rootView.findViewById(R.id.checkBox1);
-        enabledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SleepPrefs.setBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, isChecked);
-                Log.d(SleepLogging.TAG, "enabledCheckBox; set to: " + isChecked);
-                enableDisablePageElements(rootView, isChecked);
-            }
-        });
-        
-        Button sleepButton = (Button)rootView.findViewById(R.id.startDailyButton);
-        sleepButton.setOnClickListener(new OnClickListener() {
+    
+    private void hookupButtons(final View rootView) {
+        Button refreshButton = (Button)rootView.findViewById(R.id.refreshButton);
+        refreshButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                invokeSleep();
+                refreshPhotos();
+                refreshTextWindow(rootView);
             }
         });
-
-        Button stopSleepButton = (Button)rootView.findViewById(R.id.stopDailyButton);
-        stopSleepButton.setOnClickListener(new OnClickListener() {
+        Button showPhotosButton = (Button)rootView.findViewById(R.id.showPhotosButton);
+        showPhotosButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopSleep();
+                showPhotos();
             }
         });
+    }
+    
+    private void refreshPhotos() {
+        images = new PhotoReader().list(getActivity());
+    }
+    
+    private void refreshTextWindow(View rootView) {
+        TextView photoTextView = (TextView) rootView.findViewById(R.id.photoTextView);
+        //photoTextView.setText("This is some text\nThis is a second line");
+        StringBuilder sb = new StringBuilder();
+        sb.append("Found " + images.size() + " photo entries\n");
+        for (PhotoEntry image : images) {
+            sb.append(image.getBucketName()).append('/').append(image.getName()).append('\n');
+        }
+        photoTextView.setText(sb.toString());
+    }
 
-        boolean enabled = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
-        enabledCheckBox.setChecked(enabled);
-        Log.d(SleepLogging.TAG, "enabledCheckBox; initialised to: " + enabled);
-
-        initialiseTimePicker(startSleepTimePicker, "start",
-                SleepPrefs.PREF_START_SLEEP_TIME_HOURS,
-                SleepPrefs.PREF_START_SLEEP_TIME_MINS);
-        initialiseTimePicker(endSleepTimePicker, "end",
-                SleepPrefs.PREF_END_SLEEP_TIME_HOURS,
-                SleepPrefs.PREF_END_SLEEP_TIME_MINS);
+    private void showPhotos() {
+        int count = images.size();
+        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting show photos; count: " + count);
         
-        enableDisablePageElements(rootView, enabled);
+        Intent intent = new Intent(this.getActivity(), PhotoActivity.class);
+        Bundle sendBundle = new Bundle();
+        sendBundle.putInt("count", count);
+        if (count > 0) {
+            PhotoEntry photoEntry = images.iterator().next();
+            sendBundle.putString("photo_data", photoEntry.getData());
+            sendBundle.putString("photo_thumb", photoEntry.getThumb());
+        }
+        intent.putExtras(sendBundle);
+        startActivity(intent);
     }
     
-    private void initialiseTimePicker(TimePicker timePicker, String desc,
-            String prefsKeyHours, String prefsKeyMinutes) {
-        int hour   = SleepPrefs.getIntPref(getActivity(), prefsKeyHours, 18);
-        int minute = SleepPrefs.getIntPref(getActivity(), prefsKeyMinutes, 0);
-        timePicker.setCurrentHour(hour);
-        timePicker.setCurrentMinute(minute);
-        Log.d(SleepLogging.TAG, "initialiseTimePicker; " + desc + "; "+ hour + "; " + minute);
-    }
-    
-    private void enableDisablePageElements(View rootView, boolean isEnabled) {
-        TextView startSleepLabel        = (TextView)   rootView.findViewById(R.id.startSleepLabel);
-        TextView endSleepLabel          = (TextView)   rootView.findViewById(R.id.endSleepLabel);
-        TimePicker startSleepTimePicker = (TimePicker) rootView.findViewById(R.id.startSleepTimePicker);
-        TimePicker endSleepTimePicker   = (TimePicker) rootView.findViewById(R.id.endSleepTimePicker);
-        Button startTimingsButton       = (Button)     rootView.findViewById(R.id.startDailyButton);
-        startSleepLabel.setEnabled(isEnabled);
-        endSleepLabel.setEnabled(isEnabled);
-        startSleepTimePicker.setEnabled(isEnabled);
-        endSleepTimePicker.setEnabled(isEnabled);
-        startTimingsButton.setEnabled(isEnabled);
-    }
-
-    private void invokeSleep() {
-        Log.i(SleepLogging.TAG, "SleepTimingsFragment; starting timing alarms now ...");
-        Alarms.startAlarms(getActivity(), RunningMode.DAILY);
-    }
-    
-    private void stopSleep() {
-        Log.i(SleepLogging.TAG, "SleepTimingsFragment; stop sleep now");
-        Alarms.stopAlarms(getActivity());
-        
-        new PhotoReader().list(getActivity());
-    }
 }

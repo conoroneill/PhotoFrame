@@ -26,6 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PhotoActivity"
+            android:label="@string/photo_activity_name" >
+        </activity>
         <receiver android:name="uk.co.puddle.sleepcontrol.alarms.WakeAlarmReceiver"/>
         <receiver android:name="uk.co.puddle.sleepcontrol.alarms.SnoozeAlarmReceiver"/>
         <receiver android:name="uk.co.puddle.sleepcontrol.alarms.BootReceiver" android:enabled="false">

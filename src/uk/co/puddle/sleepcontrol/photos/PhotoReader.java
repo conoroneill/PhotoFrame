@@ -20,7 +20,7 @@ public class PhotoReader {
         return false;
     }
     
-    public void list(Context context) {
+    public List<PhotoEntry> list(Context context) {
         boolean readable = isExternalStorageReadable();
         Log.i(SleepLogging.TAG, "PhotoReader: readable: " + readable);
         if (!readable) {
@@ -32,7 +32,8 @@ public class PhotoReader {
         listSubDir(Environment.DIRECTORY_MUSIC);
         listSubDir(Environment.DIRECTORY_DCIM);
         
-        List<String> images = PhotoHelper1.getCameraImages(context);
+        List<PhotoEntry> images = PhotoHelper1.getCameraImages(context);
+        return images;
     }
 
     private void listSubDir(String subDirName) {

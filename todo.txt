@@ -1,0 +1,25 @@
+*) Add settings menu, add a setting for delay between photos
+
+*) Random photo order
+
+*) Add filename and date/time to screen
+
+*) Turn off most of the debug logs
+
+*) In front page list, show first and last few photo names / folders
+
+*) Try on the live android tablet
+
+*) Rename app to Photo Frame with timer (or similar)
+
+*) Add Help->About page
+
+*) Investigate how to publish on google play
+
+*) Investigate how to get adds
+
+*) Dual 24-hour timers
+
+*) Background thread to turn image into bitmap
+
+*) Background thread for initial count of photos

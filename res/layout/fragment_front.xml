@@ -18,4 +18,21 @@
                 android:text="@string/front_page_text"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/photoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:text="" />
+
+            <Button
+                android:id="@+id/refreshButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh_button_label" />
+            <Button
+                android:id="@+id/showPhotosButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_photos_button_label" />
 </LinearLayout>

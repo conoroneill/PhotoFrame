@@ -8,6 +8,8 @@
     <string name="title_tab2">Sleep Now</string>
 
     <string name="front_page_text">This is the front page</string>
+    <string name="refresh_button_label">Refresh photos</string>
+    <string name="show_photos_button_label">Show photos ...</string>
     
     <string name="enable_timed_sleep_label">Enabled:</string>
     <string name="start_sleep_time_label">Go to sleep at:</string>
@@ -22,4 +24,7 @@
 
     <string name="local_service_label">Sleep Control Service</string>
     <string name="local_service_started">Sleep Control Service is running</string>
+    
+    <string name="photo_activity_name">Photo Activity</string>
+    <string name="photo_view_content_descrption">Photos</string>
 </resources>

@@ -29,6 +29,8 @@ public class PhotoHelper1 {
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
     public static final String PHOTO_IMAGE_BUCKET_ID =
             getBucketId(PHOTO_IMAGE_BUCKET_NAME.getAbsolutePath());
+    
+    private static boolean useAllImages = false;
 
     /**
      * Matches code in MediaProvider.computeBucketValues. Should be a common
@@ -39,33 +41,39 @@ public class PhotoHelper1 {
         return String.valueOf(path.toLowerCase().hashCode());
     }
 
-    public static List<String> getCameraImages(Context context) {
-        Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
-        Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
-        List<String> images = getCameraImages(context, CAMERA_IMAGE_BUCKET_ID);
-        Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
-        for (String image : images) {
-            Log.i(SleepLogging.TAG, "PhotoReader: image: " + image);
-        }
-        Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
-        Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
+    public static boolean isUseAllImages() {
+        return useAllImages;
+    }
 
-        images = getCameraImages(context, PHOTO_IMAGE_BUCKET_ID);
-        Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
-        for (String image : images) {
-            Log.i(SleepLogging.TAG, "PhotoReader: image: " + image);
+    public static void setUseAllImages(boolean useAllImages) {
+        PhotoHelper1.useAllImages = useAllImages;
+    }
+
+    public static List<PhotoEntry> getCameraImages(Context context) {
+        List<PhotoEntry> images;
+        if (isUseAllImages()) {
+            images = getAllImages(context);
+            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
+        } else {
+            Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
+            Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
+            images = getCameraImages(context, CAMERA_IMAGE_BUCKET_ID);
+            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
+            
+            Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
+            Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
+
+            images.addAll(getCameraImages(context, PHOTO_IMAGE_BUCKET_ID));
+            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
         }
-        
-        images = getAllImages(context);
-        Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
-        for (String image : images) {
+        for (PhotoEntry image : images) {
             Log.i(SleepLogging.TAG, "PhotoReader: image: " + image);
         }
         return images;
     }
     
-    public static List<String> getCameraImages(Context context, String rootBucketId) {
-        Log.i(SleepLogging.TAG, "PhotoHelper1: rootBucketId: " + rootBucketId);
+    public static List<PhotoEntry> getCameraImages(Context context, String rootBucketId) {
+        //Log.i(SleepLogging.TAG, "PhotoHelper1: rootBucketId: " + rootBucketId);
         final String[] projection = { MediaStore.Images.Media.DATA }; // which 'columns' we need
         final String selection = MediaStore.Images.Media.BUCKET_ID + " = ?";
         final String[] selectionArgs = { rootBucketId };
@@ -74,40 +82,54 @@ public class PhotoHelper1 {
                 selection, // can be null, meaning all (http://stackoverflow.com/questions/3020478/android-list-all-images-available/3021018#3021018)
                 selectionArgs, // can be null if selection is null
                 null);
-        List<String> result = new ArrayList<String>(cursor.getCount());
+        List<PhotoEntry> result = new ArrayList<PhotoEntry>(cursor.getCount());
         if (cursor.moveToFirst()) {
             final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             do {
                 final String data = cursor.getString(dataColumn);
-                result.add(data);
+                PhotoEntry photoEntry = new PhotoEntry().withData(data);
+                result.add(photoEntry);
             } while (cursor.moveToNext());
         }
         cursor.close();
         return result;
     }
 
-    public static List<String> getAllImages(Context context) {
+    public static List<PhotoEntry> getAllImages(Context context) {
         Log.i(SleepLogging.TAG, "PhotoHelper1: getAllImages ...");
         final String[] projection = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DISPLAY_NAME,
+                MediaStore.Images.Media.BUCKET_DISPLAY_NAME,
+                MediaStore.Images.Media.BUCKET_ID,
+                MediaStore.Images.Media.MINI_THUMB_MAGIC,
                 }; // which 'columns' we need
         final Cursor cursor = context.getContentResolver().query(Images.Media.EXTERNAL_CONTENT_URI, 
                 projection, 
                 null, // can be null, meaning all (http://stackoverflow.com/questions/3020478/android-list-all-images-available/3021018#3021018)
                 null, // can be null if selection is null
                 null);
-        List<String> result = new ArrayList<String>(cursor.getCount());
+        List<PhotoEntry> result = new ArrayList<PhotoEntry>(cursor.getCount());
         if (cursor.moveToFirst()) {
-            final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            final int displayColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
-            final int dateColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN);
+            final int dataColumn       = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            final int displayColumn    = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
+            final int dateColumn       = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN);
+            final int bucketNameColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_DISPLAY_NAME);
+            final int bucketIdColumn   = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.BUCKET_ID);
+            final int thumbColumn      = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.MINI_THUMB_MAGIC);
             do {
-                final String data = cursor.getString(dataColumn);
-                final String display = cursor.getString(displayColumn);
-                final String date = cursor.getString(dateColumn);
-                Log.i(SleepLogging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data);
-                result.add(data);
+                final String data       = cursor.getString(dataColumn);
+                final String display    = cursor.getString(displayColumn);
+                final String date       = cursor.getString(dateColumn);
+                final String bucketName = cursor.getString(bucketNameColumn);
+                final String bucketId   = cursor.getString(bucketIdColumn);
+                final String thumb     = cursor.getString(thumbColumn);
+                Log.i(SleepLogging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data
+                        + "; bucket: " + bucketName + "; id: " + bucketId + "; th: " + thumb);
+                PhotoEntry photoEntry = new PhotoEntry();
+                photoEntry.withName(display).withData(data).withDate(date);
+                photoEntry.withBucketName(bucketName).withBucketId(bucketId).withThumb(thumb);
+                result.add(photoEntry);
             } while (cursor.moveToNext());
         }
         cursor.close();

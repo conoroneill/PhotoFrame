@@ -8,6 +8,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class SleepIntentService extends IntentService {
@@ -84,6 +85,11 @@ public class SleepIntentService extends IntentService {
         Log.d(SleepLogging.TAG, "doWakeUpScreen; acquired lock: " + wl.toString() + ", due to: " + triggeredByAction);
         Log.i(SleepLogging.TAG, "doWakeUpScreen; acquired lock (" + triggeredByAction + ")");
         
+        Log.i(SleepLogging.TAG, "doWakeUpScreen; sending broadcast intent: " + SleepAction.WAKE_UP_SCREEN);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent wakeIntent = new Intent(SleepAction.WAKE_UP_SCREEN.getActionName());
+        lbm.sendBroadcast(wakeIntent);
+        
         //pm.wakeUp(SystemClock.uptimeMillis());
     }
 
@@ -105,6 +111,11 @@ public class SleepIntentService extends IntentService {
         //PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //pm.goToSleep(SystemClock.uptimeMillis());
         
+        Log.i(SleepLogging.TAG, "doSnoozeScreen; sending broadcast intent: " + SleepAction.SNOOZE_SCREEN);
+        LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
+        Intent wakeIntent = new Intent(SleepAction.SNOOZE_SCREEN.getActionName());
+        lbm.sendBroadcast(wakeIntent);
+
         //Toast.makeText(this, "SleepIntentService SNOOZE", Toast.LENGTH_SHORT).show();
         //Log.i(SleepLogging.TAG, "Exiting doAlarmOff");
     }
