@@ -3,6 +3,7 @@ package uk.co.puddle.sleepcontrol;
 import java.util.List;
 
 import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
+import uk.co.puddle.sleepcontrol.photos.PhotoOrder;
 import uk.co.puddle.sleepcontrol.photos.PhotoReader;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -32,6 +33,8 @@ public class PhotoActivity extends Activity {
     
     private LocalBroadcastManager lbm;
     private BroadcastReceiver br;
+    
+    private PhotoOrder photoOrder = PhotoOrder.RANDOM;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -187,9 +190,17 @@ public class PhotoActivity extends Activity {
     }
 
     private void nextPhoto() {
-        currentPhoto++;
-        if (currentPhoto >= images.size()) {
-            currentPhoto = 0;
+        switch (photoOrder) {
+        case SEQUENTIAL:
+            currentPhoto++;
+            if (currentPhoto >= images.size()) {
+                currentPhoto = 0;
+            }
+            break;
+        case RANDOM:
+            double r = Math.random();
+            currentPhoto = (int)Math.floor(images.size() * r);
+            break;
         }
         showPhoto(currentPhoto);
         startIntervalTimer();
