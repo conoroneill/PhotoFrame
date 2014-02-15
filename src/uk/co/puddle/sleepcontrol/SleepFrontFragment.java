@@ -92,13 +92,17 @@ public class SleepFrontFragment extends Fragment {
         if (startEnd < fromStart) { startEnd = fromStart; }
         for (int i = 0; i < fromStart; i++) {
             PhotoEntry image = images.get(i);
-            sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName()).append(' ').append(image.getData()).append('\n');
+            sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName());
+            //sb.append(' ').append(image.getData());
+            sb.append('\n');
         }
         if (fromStart < count) {
             sb.append("... \n");
             for (int i = startEnd; i < count; i++) {
                 PhotoEntry image = images.get(i);
-                sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName()).append(' ').append(image.getData()).append('\n');
+                sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName());
+                //sb.append(' ').append(image.getData());
+                sb.append('\n');
             }
         }
         boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
