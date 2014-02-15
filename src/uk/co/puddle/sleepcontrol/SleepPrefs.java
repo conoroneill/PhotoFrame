@@ -10,6 +10,7 @@ public class SleepPrefs {
     public static final String PREF_TAB_POSITION = "tab.position";
     public static final String PREF_RUNNING_MODE = "running.mode";
     public static final String PREF_ENABLE_TIMED_SLEEP = "enable.timed.sleep";
+    public static final String PREF_ENABLE_NOW_SLEEP = "enable.now.sleep";
     public static final String PREF_DELAY_BEFORE_SLEEP = "delay.before.sleep";
     public static final String PREF_DELAY_BEFORE_WAKE = "delay.before.wake";
     public static final String PREF_START_SLEEP_TIME_HOURS = "start.sleep.time.hours";
@@ -17,8 +18,8 @@ public class SleepPrefs {
     public static final String PREF_END_SLEEP_TIME_HOURS   = "end.sleep.time.hours";
     public static final String PREF_END_SLEEP_TIME_MINS    = "end.sleep.time.mins";
     
-    public static final int DEFAULT_WAKE_INTERVAL = 20;
-    public static final int DEFAULT_SNOOZE_INTERVAL = 20;
+    public static final int DEFAULT_WAKE_INTERVAL   = 20; // for 'now' timer; secs
+    public static final int DEFAULT_SNOOZE_INTERVAL = 20; // for 'now' timer; secs
     
     public static RunningMode getCurrentRunningMode(Context context) {
         int runningMode = getIntPref(context, PREF_RUNNING_MODE, RunningMode.STOPPED.getStorageValue());

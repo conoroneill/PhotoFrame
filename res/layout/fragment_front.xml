@@ -35,4 +35,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/show_photos_button_label" />
+            
+        <LinearLayout
+            android:id="@+id/frontTimingsButtonPair"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+            <Button
+                android:id="@+id/startfrontButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_front_button_label" />
+
+            <Button
+                android:id="@+id/stopFrontButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stop_front_button_label" />
+                <!-- style="?android:attr/buttonBarButtonStyle" -->
+            </LinearLayout>
 </LinearLayout>

@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class PhotoActivity extends Activity {
     
@@ -36,6 +37,8 @@ public class PhotoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_photo);
+//        View rootView = findViewById(R.layout.activity_view_photo);
+//        rootView.setBackgroundColor(Color.BLACK);
         
         handler = new Handler();
         
@@ -51,15 +54,12 @@ public class PhotoActivity extends Activity {
     
     @Override
     protected void onStart() {
-        Log.d(SleepLogging.TAG, "PhotoActivity; onStart...");
+        Log.i(SleepLogging.TAG, "PhotoActivity; onStart...");
         super.onStart();
 
         refreshPhotos();
         showPhoto(currentPhoto);
 
-        if (tickerRunnable == null) {
-            createTickerRunnable();
-        }
         startIntervalTimer();
     }
 
@@ -72,7 +72,7 @@ public class PhotoActivity extends Activity {
     @Override
     protected void onResume() {
         // Now in the foreground
-        Log.d(SleepLogging.TAG, "PhotoActivity; onResume...");
+        Log.i(SleepLogging.TAG, "PhotoActivity; onResume...");
         super.onResume();
         setupBroadcastReceiver();
     }
@@ -80,19 +80,16 @@ public class PhotoActivity extends Activity {
     @Override
     protected void onPause() {
         // No longer in the foreground
-        Log.d(SleepLogging.TAG, "PhotoActivity; onPause...");
+        Log.i(SleepLogging.TAG, "PhotoActivity; onPause...");
         cleardownBroadcastReceiver();
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Log.d(SleepLogging.TAG, "PhotoActivity; onStop...");
+        Log.i(SleepLogging.TAG, "PhotoActivity; onStop...");
         super.onStop();
-        if (tickerRunnable != null) {
-            Log.i(SleepLogging.TAG, "PhotoActivity; onStop; removing tickerRunnable");
-            handler.removeCallbacks(tickerRunnable);
-        }
+        stopIntervalTimer();
     }
 
     @Override
@@ -112,6 +109,22 @@ public class PhotoActivity extends Activity {
         imgView = (ImageView)findViewById(R.id.imageView);
         Bitmap bitmap = BitmapFactory.decodeFile(photoEntry.getData());
         imgView.setImageBitmap(bitmap);
+        //imgView.setBackgroundColor(Color.BLACK);
+        TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
+        myImageViewText.setText(getPhotoText(photoEntry, num, images.size()));
+        //myImageViewText.setTextColor(Color.RED);
+    }
+    
+    private String getPhotoText(PhotoEntry image, int num, int count) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(num+1).append('/').append(count);
+        sb.append(", ");
+        sb.append(image.getFormattedDate());
+        if (image.getName() != null && !image.getName().isEmpty()) {
+            sb.append(", ");
+            sb.append(image.getName());
+        }
+        return sb.toString();
     }
     
     private void setupBroadcastReceiver() {
@@ -121,6 +134,19 @@ public class PhotoActivity extends Activity {
             public void onReceive(Context paramContext, Intent paramIntent) {
                 SleepAction action = SleepAction.fromActionName(paramIntent.getAction());
                 Log.i(SleepLogging.TAG, "PhotoActivity; onReceive: " + action);
+                switch (action) {
+                case WAKE_UP_SCREEN:
+                    if (tickerRunnable == null) { // we must be currently paused
+                        startIntervalTimer();
+                    }
+                    break;
+                case SNOOZE_SCREEN:
+                    stopIntervalTimer();
+                    break;
+                default:
+                    // unexpected
+                    break;
+                }
             }
         };
         IntentFilter intentFilter = new IntentFilter();
@@ -136,6 +162,9 @@ public class PhotoActivity extends Activity {
     }
     
     private void startIntervalTimer() {
+        if (tickerRunnable == null) {
+            createTickerRunnable();
+        }
         handler.postDelayed(tickerRunnable, tickerTimeout);
     }
 
@@ -149,6 +178,14 @@ public class PhotoActivity extends Activity {
         Log.d(SleepLogging.TAG, "PhotoActivity; createTickerRunnable; created: " + tickerRunnable);
     }
     
+    private void stopIntervalTimer() {
+        if (tickerRunnable != null) {
+            Log.i(SleepLogging.TAG, "PhotoActivity; stopIntervalTimer; removing tickerRunnable");
+            handler.removeCallbacks(tickerRunnable);
+        }
+        tickerRunnable = null;
+    }
+
     private void nextPhoto() {
         currentPhoto++;
         if (currentPhoto >= images.size()) {

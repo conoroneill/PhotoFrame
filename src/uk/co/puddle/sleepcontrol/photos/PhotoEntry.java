@@ -1,5 +1,10 @@
 package uk.co.puddle.sleepcontrol.photos;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class PhotoEntry {
     
     private String name; // the filename
@@ -50,6 +55,18 @@ public class PhotoEntry {
     public PhotoEntry withThumb(String thumb) {
         this.thumb = thumb;
         return this;
+    }
+    
+    public String getFormattedDate() {
+        if (date == null || date.isEmpty()) {
+            return "";
+        }
+        Long ldate = Long.parseLong(date);
+        Date d = new Date(ldate);
+        //DateFormat df = SimpleDateFormat.getDateInstance();
+        DateFormat df = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+        String result = df.format(d);
+        return result;
     }
     
     @Override

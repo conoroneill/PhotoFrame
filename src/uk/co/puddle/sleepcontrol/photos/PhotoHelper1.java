@@ -30,7 +30,7 @@ public class PhotoHelper1 {
     public static final String PHOTO_IMAGE_BUCKET_ID =
             getBucketId(PHOTO_IMAGE_BUCKET_NAME.getAbsolutePath());
     
-    private static boolean useAllImages = false;
+    private static boolean useAllImages = true;
 
     /**
      * Matches code in MediaProvider.computeBucketValues. Should be a common
@@ -53,21 +53,21 @@ public class PhotoHelper1 {
         List<PhotoEntry> images;
         if (isUseAllImages()) {
             images = getAllImages(context);
-            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
         } else {
-            Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
-            Log.i(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
+            Log.d(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
+            Log.d(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
             images = getCameraImages(context, CAMERA_IMAGE_BUCKET_ID);
-            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
+            Log.i(SleepLogging.TAG, "PhotoReader: camera images: " + images.size());
             
-            Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
-            Log.i(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
+            Log.d(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
+            Log.d(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
 
             images.addAll(getCameraImages(context, PHOTO_IMAGE_BUCKET_ID));
-            Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
+            Log.i(SleepLogging.TAG, "PhotoReader: photo images: " + images.size());
         }
+        Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
         for (PhotoEntry image : images) {
-            Log.i(SleepLogging.TAG, "PhotoReader: image: " + image);
+            Log.d(SleepLogging.TAG, "PhotoReader: image: " + image);
         }
         return images;
     }
@@ -96,7 +96,7 @@ public class PhotoHelper1 {
     }
 
     public static List<PhotoEntry> getAllImages(Context context) {
-        Log.i(SleepLogging.TAG, "PhotoHelper1: getAllImages ...");
+        Log.d(SleepLogging.TAG, "PhotoHelper1: getAllImages ...");
         final String[] projection = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DISPLAY_NAME,
@@ -124,7 +124,7 @@ public class PhotoHelper1 {
                 final String bucketName = cursor.getString(bucketNameColumn);
                 final String bucketId   = cursor.getString(bucketIdColumn);
                 final String thumb     = cursor.getString(thumbColumn);
-                Log.i(SleepLogging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data
+                Log.d(SleepLogging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data
                         + "; bucket: " + bucketName + "; id: " + bucketId + "; th: " + thumb);
                 PhotoEntry photoEntry = new PhotoEntry();
                 photoEntry.withName(display).withData(data).withDate(date);

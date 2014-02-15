@@ -1,7 +1,6 @@
 package uk.co.puddle.sleepcontrol;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
-import uk.co.puddle.sleepcontrol.photos.PhotoReader;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -61,12 +60,12 @@ public class SleepTimingsFragment extends Fragment {
                 Log.d(SleepLogging.TAG, "endSleepTimePicker; set to: " + hour + "; " + minute);
             }
         });
-        CheckBox enabledCheckBox = (CheckBox)rootView.findViewById(R.id.checkBox1);
+        CheckBox enabledCheckBox = (CheckBox)rootView.findViewById(R.id.sleepTimeEnabledCheckBox);
         enabledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SleepPrefs.setBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, isChecked);
-                Log.d(SleepLogging.TAG, "enabledCheckBox; set to: " + isChecked);
+                Log.d(SleepLogging.TAG, "enabledCheckBox; (timed) set to: " + isChecked);
                 enableDisablePageElements(rootView, isChecked);
             }
         });
@@ -89,7 +88,7 @@ public class SleepTimingsFragment extends Fragment {
 
         boolean enabled = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
         enabledCheckBox.setChecked(enabled);
-        Log.d(SleepLogging.TAG, "enabledCheckBox; initialised to: " + enabled);
+        Log.d(SleepLogging.TAG, "enabledCheckBox; (timed); initialised to: " + enabled);
 
         initialiseTimePicker(startSleepTimePicker, "start",
                 SleepPrefs.PREF_START_SLEEP_TIME_HOURS,
@@ -131,7 +130,5 @@ public class SleepTimingsFragment extends Fragment {
     private void stopSleep() {
         Log.i(SleepLogging.TAG, "SleepTimingsFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
-        
-        new PhotoReader().list(getActivity());
     }
 }

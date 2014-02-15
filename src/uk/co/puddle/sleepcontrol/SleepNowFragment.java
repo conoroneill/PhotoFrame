@@ -9,7 +9,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 
 public class SleepNowFragment extends Fragment {
 
@@ -38,7 +42,7 @@ public class SleepNowFragment extends Fragment {
         return rootView;
     }
 
-    private void hookupTimeButton(View rootView) {
+    private void hookupTimeButton(final View rootView) {
         NumberPicker delayBeforeSleepNumberPicker = (NumberPicker) rootView.findViewById(R.id.delayBeforeSleepNumberPicker);
         delayBeforeSleepNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
@@ -57,6 +61,15 @@ public class SleepNowFragment extends Fragment {
                 Log.d(SleepLogging.TAG, "delayBeforeWakeNumberPicker; set to: " + delayBeforeWake);
             }
         });
+        CheckBox enabledCheckBox = (CheckBox)rootView.findViewById(R.id.sleepNowEnabledCheckBox);
+        enabledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SleepPrefs.setBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, isChecked);
+                Log.d(SleepLogging.TAG, "enabledCheckBox; (now) set to: " + isChecked);
+                enableDisablePageElements(rootView, isChecked);
+            }
+        });
         
         Button sleepButton = (Button)rootView.findViewById(R.id.startIntervalsButton);
         sleepButton.setOnClickListener(new OnClickListener() {
@@ -73,6 +86,10 @@ public class SleepNowFragment extends Fragment {
                 stopSleep();
             }
         });
+        boolean enabled = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        enabledCheckBox.setChecked(enabled);
+        Log.d(SleepLogging.TAG, "enabledCheckBox; (now); initialised to: " + enabled);
+
 
         delayBeforeSleep = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
         delayBeforeWake  = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_WAKE,  delayBeforeWake);
@@ -84,7 +101,9 @@ public class SleepNowFragment extends Fragment {
         delayBeforeWakeNumberPicker.setMinValue(1);
         delayBeforeWakeNumberPicker.setMaxValue(60);
         delayBeforeWakeNumberPicker.setValue(delayBeforeWake);
-    }
+
+        enableDisablePageElements(rootView, enabled);
+}
     
     private void invokeSleep() {
         Log.i(SleepLogging.TAG, "SleepNowFragment; starting; delayBeforeSleep: " + delayBeforeSleep + "; delayBeforeWake: " + delayBeforeWake);
@@ -95,4 +114,18 @@ public class SleepNowFragment extends Fragment {
         Log.i(SleepLogging.TAG, "SleepNowFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
     }
+
+    private void enableDisablePageElements(View rootView, boolean isEnabled) {
+        TextView startSleepLabel                  = (TextView)     rootView.findViewById(R.id.startSleepNowLabel);
+        TextView endSleepLabel                    = (TextView)     rootView.findViewById(R.id.endSleepNowLabel);
+        NumberPicker delayBeforeSleepNumberPicker = (NumberPicker) rootView.findViewById(R.id.delayBeforeSleepNumberPicker);
+        NumberPicker delayBeforeWakeNumberPicker  = (NumberPicker) rootView.findViewById(R.id.delayBeforeWakeNumberPicker);
+        Button sleepButton                        = (Button)       rootView.findViewById(R.id.startIntervalsButton);
+        startSleepLabel.setEnabled(isEnabled);
+        endSleepLabel.setEnabled(isEnabled);
+        delayBeforeSleepNumberPicker.setEnabled(isEnabled);
+        delayBeforeWakeNumberPicker.setEnabled(isEnabled);
+        sleepButton.setEnabled(isEnabled);
+    }
+
 }

@@ -7,24 +7,32 @@
     <string name="title_tab1">Timings</string>
     <string name="title_tab2">Sleep Now</string>
 
+    <!-- Front page (tab) -->
     <string name="front_page_text">This is the front page</string>
     <string name="refresh_button_label">Refresh photos</string>
-    <string name="show_photos_button_label">Show photos ...</string>
+    <string name="show_photos_button_label">Show photos &#8230;</string>
+    <string name="start_front_button_label">Show photos (with timers) &#8230;</string>
+    <string name="stop_front_button_label">Stop all sleep control</string>
     
+    <!--  Timer page -->
     <string name="enable_timed_sleep_label">Enabled:</string>
     <string name="start_sleep_time_label">Go to sleep at:</string>
     <string name="end_sleep_time_label">Wake up at:</string>
     <string name="start_daily_button_label">Start daily timings</string>
     <string name="stop_daily_button_label">Stop all sleep control</string>
     
+    <!-- 'Time now' page -->
+    <string name="enable_sleep_now_label">Enabled:</string>
     <string name="delay_before_sleep_secs">Go to sleep in (n) seconds:</string>
     <string name="delay_before_wake_secs">Wake up in (n) seconds:</string>
     <string name="start_intervals_button_label">Start now (awake)</string>
     <string name="stop_intervals_button_label">Stop all sleep control</string>
 
+    <!--  service -->
     <string name="local_service_label">Sleep Control Service</string>
     <string name="local_service_started">Sleep Control Service is running</string>
     
+    <!--  photo view page -->
     <string name="photo_activity_name">Photo Activity</string>
     <string name="photo_view_content_descrption">Photos</string>
 </resources>

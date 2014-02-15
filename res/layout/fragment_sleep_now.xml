@@ -11,8 +11,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
+            <CheckBox
+                android:id="@+id/sleepNowEnabledCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enable_sleep_now_label"
+                android:textSize="20sp" />
+
             <TextView
-                android:id="@+id/startSleepLabel"
+                android:id="@+id/startSleepNowLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delay_before_sleep_secs"
@@ -24,7 +31,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/endSleepLabel"
+                android:id="@+id/endSleepNowLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/delay_before_wake_secs"

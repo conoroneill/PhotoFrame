@@ -2,6 +2,7 @@ package uk.co.puddle.sleepcontrol;
 
 import java.util.List;
 
+import uk.co.puddle.sleepcontrol.alarms.Alarms;
 import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
 import uk.co.puddle.sleepcontrol.photos.PhotoReader;
 import android.content.Intent;
@@ -22,6 +23,9 @@ public class SleepFrontFragment extends Fragment {
      * fragment.
      */
     public static final String ARG_SECTION_NUMBER = "section_number";
+    
+    private static final int NUM_START_PHOTOS_TO_LIST = 6;
+    private static final int NUM_END_PHOTOS_TO_LIST   = 6;
 
     private List<PhotoEntry> images;
 
@@ -56,6 +60,21 @@ public class SleepFrontFragment extends Fragment {
                 showPhotos();
             }
         });
+        Button sleepButton = (Button)rootView.findViewById(R.id.startfrontButton);
+        sleepButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                invokeSleep();
+            }
+        });
+
+        Button stopSleepButton = (Button)rootView.findViewById(R.id.stopFrontButton);
+        stopSleepButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stopSleep();
+            }
+        });
     }
     
     private void refreshPhotos() {
@@ -67,9 +86,25 @@ public class SleepFrontFragment extends Fragment {
         //photoTextView.setText("This is some text\nThis is a second line");
         StringBuilder sb = new StringBuilder();
         sb.append("Found " + images.size() + " photo entries\n");
-        for (PhotoEntry image : images) {
-            sb.append(image.getBucketName()).append('/').append(image.getName()).append('\n');
+        int count = images.size();
+        int fromStart = (count < NUM_START_PHOTOS_TO_LIST) ? count : NUM_START_PHOTOS_TO_LIST;
+        int startEnd  = (count < NUM_END_PHOTOS_TO_LIST)   ? 0     : (count - NUM_END_PHOTOS_TO_LIST);
+        if (startEnd < fromStart) { startEnd = fromStart; }
+        for (int i = 0; i < fromStart; i++) {
+            PhotoEntry image = images.get(i);
+            sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName()).append(' ').append(image.getData()).append('\n');
         }
+        if (fromStart < count) {
+            sb.append("... \n");
+            for (int i = startEnd; i < count; i++) {
+                PhotoEntry image = images.get(i);
+                sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName()).append(' ').append(image.getData()).append('\n');
+            }
+        }
+        boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
+        sb.append("Timers: Timed: " + enabledTime + "; Now: " + enabledNow);
+        
         photoTextView.setText(sb.toString());
     }
 
@@ -89,4 +124,21 @@ public class SleepFrontFragment extends Fragment {
         startActivity(intent);
     }
     
+    private void invokeSleep() {
+        boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
+        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting; Timed: " + enabledTime + "; Now: " + enabledNow);
+        if (enabledNow) {
+            Alarms.startAlarms(getActivity(), RunningMode.INTERVALS);
+        } else if (enabledTime) {
+            Alarms.startAlarms(getActivity(), RunningMode.DAILY);
+        }
+        showPhotos();
+    }
+    
+    private void stopSleep() {
+        Log.i(SleepLogging.TAG, "SleepFrontFragment; stop sleep now");
+        Alarms.stopAlarms(getActivity());
+    }
+
 }

@@ -12,7 +12,7 @@
                     android:orientation="vertical" >
 
                     <CheckBox
-                        android:id="@+id/checkBox1"
+                        android:id="@+id/sleepTimeEnabledCheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/enable_timed_sleep_label"

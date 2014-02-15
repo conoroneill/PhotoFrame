@@ -1,9 +1,10 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/viewPhotoLayout"
 
     android:layout_width="fill_parent" android:layout_height="fill_parent"
+    android:background="#ff000000"
 
     android:orientation="vertical">
 
@@ -13,4 +14,17 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/photo_view_content_descrption" />
 
-</LinearLayout>
+      <TextView
+        android:id="@+id/myImageViewText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_alignRight="@+id/imageView"
+        
+        android:layout_margin="1dp"
+        android:gravity="center"
+        android:text=""
+        android:textColor="#00ff00" />
+        <!--  android:layout_alignBottom="@+id/imageView" -->
+</RelativeLayout>

@@ -22,12 +22,12 @@ public class PhotoReader {
     
     public List<PhotoEntry> list(Context context) {
         boolean readable = isExternalStorageReadable();
-        Log.i(SleepLogging.TAG, "PhotoReader: readable: " + readable);
+        Log.d(SleepLogging.TAG, "PhotoReader: readable: " + readable);
         if (!readable) {
 //            return;
         }
         File dir = Environment.getExternalStorageDirectory();
-        Log.i(SleepLogging.TAG, "PhotoReader: externalDirName: dir: " + dir);
+        Log.d(SleepLogging.TAG, "PhotoReader: externalDirName: dir: " + dir);
         listSubDir(Environment.DIRECTORY_PICTURES);
         listSubDir(Environment.DIRECTORY_MUSIC);
         listSubDir(Environment.DIRECTORY_DCIM);
@@ -38,13 +38,13 @@ public class PhotoReader {
 
     private void listSubDir(String subDirName) {
         File dir = Environment.getExternalStoragePublicDirectory(subDirName);
-        Log.i(SleepLogging.TAG, "PhotoReader: subDirName: " + subDirName + "; dir: " + dir);
+        Log.d(SleepLogging.TAG, "PhotoReader: subDirName: " + subDirName + "; dir: " + dir);
         File[] files = dir.listFiles();
         if (files == null) {
-            Log.i(SleepLogging.TAG, "PhotoReader: listFiles returned null");
+            Log.d(SleepLogging.TAG, "PhotoReader: listFiles returned null");
         } else {
             for (File file : files) {
-                Log.i(SleepLogging.TAG, "PhotoReader: file: " + file);
+                Log.d(SleepLogging.TAG, "PhotoReader: file: " + file);
             }
         }
     }
