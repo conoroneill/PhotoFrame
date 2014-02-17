@@ -12,35 +12,39 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
-import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PhotoActivity extends Activity {
     
     private List<PhotoEntry> images;
-    private int currentPhoto = 0;
+    private PhotoOrder photoOrder = PhotoOrder.RANDOM;
+    private int currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
     
     private Handler handler;
     private Runnable tickerRunnable = null;
     
-    private long tickerTimeout = 5 * 1000; // 5 secs
+    private long tickerTimeout = 5 * 1000; // default here is 5 secs, but overridden by a setting
     
     private LocalBroadcastManager lbm;
     private BroadcastReceiver br;
     
-    private PhotoOrder photoOrder = PhotoOrder.RANDOM;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Make this use the whole screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        
         setContentView(R.layout.activity_view_photo);
         
         handler = new Handler();
@@ -52,6 +56,13 @@ public class PhotoActivity extends Activity {
         Log.d(SleepLogging.TAG, "PhotoActivity; photoData: " + photoData);
         //String thumb = receiveBundle.getString("photo_thumb");
         //Log.i(SleepLogging.TAG, "PhotoActivity; thumb: " + thumb);
+        
+        String delaySecs = SleepPrefs.getStringPrefFromSettings(this, SleepPrefs.PREF_DELAY_SECS, "10");
+        Log.d(SleepLogging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
+        tickerTimeout = Integer.parseInt(delaySecs) * 1000;
+        
+        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
+        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
     }
     
     
@@ -61,6 +72,7 @@ public class PhotoActivity extends Activity {
         super.onStart();
 
         refreshPhotos();
+        nextPhotoNumber();
         showPhoto(currentPhoto);
 
         startIntervalTimer();
@@ -103,6 +115,7 @@ public class PhotoActivity extends Activity {
 
     private void refreshPhotos() {
         images = new PhotoReader().list(this);
+        currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
     }
     
     private void showPhoto(int num) {
@@ -137,7 +150,7 @@ public class PhotoActivity extends Activity {
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, width, height);
-        Log.i(SleepLogging.TAG, "getBitmapForView; width: " + width + "; height: " + height + "; sampleSize: " + options.inSampleSize);
+        Log.d(SleepLogging.TAG, "getBitmapForView; width: " + width + "; height: " + height + "; sampleSize: " + options.inSampleSize);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
@@ -241,6 +254,12 @@ public class PhotoActivity extends Activity {
     }
 
     private void nextPhoto() {
+        nextPhotoNumber();
+        showPhoto(currentPhoto);
+        startIntervalTimer();
+    }
+
+    private void nextPhotoNumber() {
         switch (photoOrder) {
         case SEQUENTIAL:
             currentPhoto++;
@@ -253,7 +272,5 @@ public class PhotoActivity extends Activity {
             currentPhoto = (int)Math.floor(images.size() * r);
             break;
         }
-        showPhoto(currentPhoto);
-        startIntervalTimer();
     }
 }

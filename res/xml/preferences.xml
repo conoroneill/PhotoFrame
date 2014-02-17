@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/pref_photo_display"
+        android:key="pref_photo_display_settings"
+        >
+      <EditTextPreference
+        android:key="pref.delay.secs"
+        android:title="@string/pref_delay_secs"
+        android:summary="@string/pref_delay_secs_summary"
+        android:defaultValue="10" />
+      <CheckBoxPreference
+        android:key="pref.display.random"
+        android:title="@string/pref_display_random"
+        android:summary="@string/pref_display_random_summary"
+        android:defaultValue="true" />
+    </PreferenceCategory>
+    <!--
+    <ListPreference
+        android:dependency="pref_sync"
+        android:key="pref_syncConnectionType"
+        android:title="@string/pref_syncConnectionType"
+        android:dialogTitle="@string/pref_syncConnectionType"
+        android:entries="@array/pref_syncConnectionTypes_entries"
+        android:entryValues="@array/pref_syncConnectionTypes_values"
+        android:defaultValue="@string/pref_syncConnectionTypes_default" />
+        -->
+</PreferenceScreen>

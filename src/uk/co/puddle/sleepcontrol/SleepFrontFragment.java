@@ -24,8 +24,8 @@ public class SleepFrontFragment extends Fragment {
      */
     public static final String ARG_SECTION_NUMBER = "section_number";
     
-    private static final int NUM_START_PHOTOS_TO_LIST = 6;
-    private static final int NUM_END_PHOTOS_TO_LIST   = 6;
+    private static final int NUM_START_PHOTOS_TO_LIST = 4;
+    private static final int NUM_END_PHOTOS_TO_LIST   = 4;
 
     private List<PhotoEntry> images;
 
@@ -107,7 +107,7 @@ public class SleepFrontFragment extends Fragment {
         }
         boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
         boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
-        sb.append("Timers: Timed: " + enabledTime + "; Now: " + enabledNow);
+        sb.append("Timers: Daily: " + enabledTime + "; Now: " + enabledNow);
         
         photoTextView.setText(sb.toString());
     }
@@ -131,7 +131,7 @@ public class SleepFrontFragment extends Fragment {
     private void invokeSleep() {
         boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
         boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
-        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting; Timed: " + enabledTime + "; Now: " + enabledNow);
+        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting; Daily: " + enabledTime + "; Now: " + enabledNow);
         if (enabledNow) {
             Alarms.startAlarms(getActivity(), RunningMode.INTERVALS);
         } else if (enabledTime) {
