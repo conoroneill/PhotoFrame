@@ -1,10 +1,12 @@
 *) Add settings menu, add a setting for delay between photos
 
-*) Random photo order
-
 *) Rename app to Photo Frame with timer (or similar)
 
 *) Add Help->About page
+
+*) Use proper full-screen for the images
+
+*) Investigate transitions between images
 
 *) Investigate how to publish on google play
 

@@ -12,16 +12,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PhotoActivity extends Activity {
-    
-    private ImageView imgView;
     
     private List<PhotoEntry> images;
     private int currentPhoto = 0;
@@ -40,8 +42,6 @@ public class PhotoActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_photo);
-//        View rootView = findViewById(R.layout.activity_view_photo);
-//        rootView.setBackgroundColor(Color.BLACK);
         
         handler = new Handler();
         
@@ -109,15 +109,66 @@ public class PhotoActivity extends Activity {
         PhotoEntry photoEntry = images.get(num);
         Log.i(SleepLogging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
-        imgView = (ImageView)findViewById(R.id.imageView);
-        Bitmap bitmap = BitmapFactory.decodeFile(photoEntry.getData());
+        ImageView imgView = (ImageView)findViewById(R.id.imageView);
+        
+//        Bitmap bitmap = BitmapFactory.decodeFile(photoEntry.getData());
+        Bitmap bitmap = getBitmapForView(imgView, photoEntry);
         imgView.setImageBitmap(bitmap);
-        //imgView.setBackgroundColor(Color.BLACK);
+
         TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
-        myImageViewText.setText(getPhotoText(photoEntry, num, images.size()));
-        //myImageViewText.setTextColor(Color.RED);
+        String text = getPhotoText(photoEntry, num, images.size());
+//        text = text + " " + width + " x " + height;
+        myImageViewText.setText(text);
     }
     
+    private Bitmap getBitmapForView(ImageView imgView, PhotoEntry photoEntry) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        int height = metrics.heightPixels;
+        int width  = metrics.widthPixels;
+
+        // Info about how to load large bitmaps here:
+        // http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+        
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoEntry.getData(), options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, width, height);
+        Log.i(SleepLogging.TAG, "getBitmapForView; width: " + width + "; height: " + height + "; sampleSize: " + options.inSampleSize);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(photoEntry.getData(), options);
+    }
+    
+    // Info about how to load large bitmaps here:
+    // http://developer.android.com/training/displaying-bitmaps/load-bitmap.html
+    private static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     private String getPhotoText(PhotoEntry image, int num, int count) {
         StringBuilder sb = new StringBuilder();
         sb.append(num+1).append('/').append(count);

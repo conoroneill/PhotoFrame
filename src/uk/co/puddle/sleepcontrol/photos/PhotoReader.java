@@ -1,6 +1,7 @@
 package uk.co.puddle.sleepcontrol.photos;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import uk.co.puddle.sleepcontrol.SleepLogging;
@@ -22,9 +23,9 @@ public class PhotoReader {
     
     public List<PhotoEntry> list(Context context) {
         boolean readable = isExternalStorageReadable();
-        Log.d(SleepLogging.TAG, "PhotoReader: readable: " + readable);
         if (!readable) {
-//            return;
+            Log.i(SleepLogging.TAG, "PhotoReader: readable: " + readable + "; no images");
+            return new ArrayList<PhotoEntry>();
         }
         File dir = Environment.getExternalStorageDirectory();
         Log.d(SleepLogging.TAG, "PhotoReader: externalDirName: dir: " + dir);
