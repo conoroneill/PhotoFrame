@@ -38,13 +38,36 @@
     <string name="photo_activity_name">Photos</string> <!--  will be hidden when we do fullscreen -->
     <string name="photo_view_content_descrption">Photos</string>
     
-    <!--  Settings menu -->
+    <!--  Settings page -->
     <string name="settings_activity_name">Settings</string>
     <string name="pref_photo_display">Photo Display settings</string>
     <string name="pref_delay_secs">Delay between photos (seconds)</string>
     <string name="pref_delay_secs_summary">Delay between photos</string>
     <string name="pref_delay_secs_summary_pt1">Delay between photos is</string>
     <string name="pref_delay_secs_summary_pt2">seconds</string>
+    <!-- 
     <string name="pref_display_random">Random order</string>
     <string name="pref_display_random_summary">Show photos in random order</string>
+    -->
+    <string name="pref_display_order">Display order</string>
+    <string-array name="display_order_labels">
+        <item>Sequential</item>
+        <item>Random</item>
+    </string-array>
+    <string-array name="display_order_values">
+        <item>SEQUENTIAL</item>
+        <item>RANDOM</item>
+    </string-array>
+    <string name="display_order_value_default">RANDOM</string>
+    <string name="pref_display_order_summary_pt1">Currently using</string>
+    <string name="pref_display_order_summary_pt2">order</string>
+    
+    <!--  Help page -->
+    <string name="help_activity_name">Help</string>
+    <string name="help_text1_content">Photo Viewer, V1.0, Feb 2014</string>
+    <string name="help_text2_content">Written by Conor O\'Neill</string>
+    <string name="help_text3_content">Published by Puddle Enterprises</string>
+    <string name="help_text4_content">For further information, please visit:</string>
+    <string name="help_url_content">www.puddleenterprises.com</string>
+    
 </resources>

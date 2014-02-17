@@ -1,10 +1,4 @@
-*) Add settings menu, add a setting for delay between photos
-
 *) Rename app to Photo Frame with timer (or similar)
-
-*) Add Help->About page
-
-*) Use proper full-screen for the images
 
 *) Investigate transitions between images
 

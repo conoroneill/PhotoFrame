@@ -17,4 +17,9 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <!-- Special styling for number picker -->
+    <!-- http://stackoverflow.com/questions/17993192/android-number-picker-default-design-changes-in-jelly-bean-and-ice-cream-sandwit -->
+    <style name="cust_numberpicker" parent="@android:style/Theme.NoTitleBar.Fullscreen"> 
+    </style>
+
 </resources>

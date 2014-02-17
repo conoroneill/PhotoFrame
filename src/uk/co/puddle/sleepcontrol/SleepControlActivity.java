@@ -108,7 +108,9 @@ public class SleepControlActivity extends FragmentActivity implements
     }
     
     private void showHelp() {
-        Log.i(SleepLogging.TAG, "showHelp");
+        Log.d(SleepLogging.TAG, "showHelp");
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
 	
 	@Override

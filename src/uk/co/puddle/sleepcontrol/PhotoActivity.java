@@ -61,8 +61,10 @@ public class PhotoActivity extends Activity {
         Log.d(SleepLogging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
         tickerTimeout = Integer.parseInt(delaySecs) * 1000;
         
-        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
-        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
+//        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
+//        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
+        String orderValue = SleepPrefs.getStringPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_ORDER, "");
+        photoOrder = PhotoOrder.fromValue(orderValue);
     }
     
     

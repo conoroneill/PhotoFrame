@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 // See: http://developer.android.com/guide/topics/ui/settings.html#Fragment
 
@@ -20,6 +21,7 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         // This fills in the summary correctly when we start
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         onSharedPreferenceChanged(sharedPref, SleepPrefs.PREF_DELAY_SECS);
+        onSharedPreferenceChanged(sharedPref, SleepPrefs.PREF_DISPLAY_ORDER);
     }
 
     @Override
@@ -28,14 +30,34 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         if (key.equals(SleepPrefs.PREF_DELAY_SECS)) {
             Preference delayPref = findPreference(key);
             
+            String currentValue = sharedPreferences.getString(key, "");
             String pt1 = getResources().getString(R.string.pref_delay_secs_summary_pt1);
             String pt2 = getResources().getString(R.string.pref_delay_secs_summary_pt2);
-            String msg = pt1 + " " + sharedPreferences.getString(key, "") + " " + pt2;
-            //Log.i(SleepLogging.TAG, msg);
+            String msg = pt1 + " " + currentValue + " " + pt2;
+            Log.d(SleepLogging.TAG, msg);
             delayPref.setSummary(msg);
+        } else if (key.equals(SleepPrefs.PREF_DISPLAY_ORDER)) {
+            Preference orderPref = findPreference(key);
+            
+            String currentValue = sharedPreferences.getString(key, "");
+            String currentLabel = getCurrentOrderLabel(currentValue);
+            String pt1 = getResources().getString(R.string.pref_display_order_summary_pt1);
+            String pt2 = getResources().getString(R.string.pref_display_order_summary_pt2);
+            String msg = pt1 + " " + currentLabel + " " + pt2;
+            Log.d(SleepLogging.TAG, msg);
+            orderPref.setSummary(msg);
         }
     }
     
+    private String getCurrentOrderLabel(String currentValue) {
+        String values[] = getResources().getStringArray(R.array.display_order_values);
+        String labels[] = getResources().getStringArray(R.array.display_order_labels);
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(currentValue)) { return labels[i]; }
+        }
+        return "Unknown";
+    }
+
     @Override
     public void onResume() {
         super.onResume();
