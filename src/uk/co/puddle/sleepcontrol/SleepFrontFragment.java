@@ -3,6 +3,7 @@ package uk.co.puddle.sleepcontrol;
 import java.util.List;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
+import uk.co.puddle.sleepcontrol.alarms.RunningMode;
 import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
 import uk.co.puddle.sleepcontrol.photos.PhotoReader;
 import android.content.Intent;

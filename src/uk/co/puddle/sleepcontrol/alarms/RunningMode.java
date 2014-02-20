@@ -1,4 +1,4 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.sleepcontrol.alarms;
 
 public enum RunningMode {
     

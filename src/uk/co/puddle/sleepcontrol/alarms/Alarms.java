@@ -2,7 +2,6 @@ package uk.co.puddle.sleepcontrol.alarms;
 
 import java.util.Calendar;
 
-import uk.co.puddle.sleepcontrol.RunningMode;
 import uk.co.puddle.sleepcontrol.SleepAction;
 import uk.co.puddle.sleepcontrol.SleepLogging;
 import uk.co.puddle.sleepcontrol.SleepNotifications;

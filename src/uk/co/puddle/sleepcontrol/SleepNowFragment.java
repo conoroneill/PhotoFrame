@@ -1,6 +1,7 @@
 package uk.co.puddle.sleepcontrol;
 
 import uk.co.puddle.sleepcontrol.alarms.Alarms;
+import uk.co.puddle.sleepcontrol.alarms.RunningMode;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;

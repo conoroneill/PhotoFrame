@@ -1,5 +1,6 @@
 package uk.co.puddle.sleepcontrol;
 
+import uk.co.puddle.sleepcontrol.alarms.RunningMode;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
