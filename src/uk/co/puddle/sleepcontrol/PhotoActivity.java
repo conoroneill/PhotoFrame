@@ -189,6 +189,10 @@ public class PhotoActivity extends Activity {
         sb.append(num+1).append('/').append(count);
         sb.append(", ");
         sb.append(image.getFormattedDate());
+        if (image.getBucketName() != null && !image.getBucketName().isEmpty()) {
+            sb.append(", ");
+            sb.append(image.getBucketName());
+        }
         if (image.getName() != null && !image.getName().isEmpty()) {
             sb.append(", ");
             sb.append(image.getName());

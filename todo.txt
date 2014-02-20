@@ -1,12 +1,24 @@
 *) Rename app to Photo Frame with timer (or similar)
 
+*) Put in a better icon. Eg: http://www.iconspedia.com/icon/photos-rounded-icon-29106.html 
+
+*) Get the Unit tests working
+
+*) Find a better number and time chooser
+
 *) Investigate transitions between images
 
 *) Investigate how to publish on google play
 
-*) Investigate how to get adds
+*) Investigate how to get adverts
 
-*) Dual 24-hour timers
+*) Dual (or even multi) 24-hour timers
+
+*) Add an auto restart on reboot, optional
+
+*) Persist the sequence count
+
+*) Double random sort order - random folder, then all within that folder, but random order
 
 *) Background thread to turn image into bitmap
 
