@@ -1,6 +1,6 @@
-package uk.co.puddle.sleepcontrol.alarms;
+package uk.co.puddle.photoframe.alarms;
 
-import uk.co.puddle.sleepcontrol.SleepLogging;
+import uk.co.puddle.photoframe.Logging;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -27,7 +27,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     public static void turnOnAlarmsAtBoot(Context context) {
 
-        Log.i(SleepLogging.TAG, "BootReceiver; turnOnAlarmsAtBoot");
+        Log.i(Logging.TAG, "BootReceiver; turnOnAlarmsAtBoot");
         // Enable {@code SampleBootReceiver} to automatically restart the alarm when the
         // device is rebooted.
         ComponentName receiver = new ComponentName(context, BootReceiver.class);
@@ -40,7 +40,7 @@ public class BootReceiver extends BroadcastReceiver {
     
 
     public static void turnOffAlarmsAtBoot(Context context) {
-        Log.i(SleepLogging.TAG, "BootReceiver; turnOffAlarmsAtBoot");
+        Log.i(Logging.TAG, "BootReceiver; turnOffAlarmsAtBoot");
 
         // Disable {@code SampleBootReceiver} so that it doesn't automatically restart the 
         // alarm when the device is rebooted.

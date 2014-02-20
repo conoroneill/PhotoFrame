@@ -1,13 +1,13 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe.prefs;
 
-import uk.co.puddle.sleepcontrol.alarms.RunningMode;
+import uk.co.puddle.photoframe.alarms.RunningMode;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-public class SleepPrefs {
+public class MyPrefs {
     
-    public static final String PREFS_NAME = "SleepControl";
+    public static final String PREFS_NAME = "PhotoFrame";
     
     public static final String PREF_TAB_POSITION = "tab.position";
     public static final String PREF_RUNNING_MODE = "running.mode";
@@ -35,24 +35,24 @@ public class SleepPrefs {
     }
 
     public static int getIntPref(Context context, String prefName, int defaultValue) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPref.getInt(prefName, defaultValue);
     }
 
     public static void setIntPref(Context context, String prefName, int value) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(prefName, value);
         editor.commit();
     }
 
     public static boolean getBooleanPref(Context context, String prefName, boolean defaultValue) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPref.getBoolean(prefName, defaultValue);
     }
 
     public static void setBooleanPref(Context context, String prefName, boolean value) {
-        SharedPreferences sharedPref = context.getSharedPreferences(SleepPrefs.PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(prefName, value);
         editor.commit();

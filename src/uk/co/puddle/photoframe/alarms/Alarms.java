@@ -1,12 +1,12 @@
-package uk.co.puddle.sleepcontrol.alarms;
+package uk.co.puddle.photoframe.alarms;
 
 import java.util.Calendar;
 
-import uk.co.puddle.sleepcontrol.SleepAction;
-import uk.co.puddle.sleepcontrol.SleepLogging;
-import uk.co.puddle.sleepcontrol.SleepNotifications;
-import uk.co.puddle.sleepcontrol.SleepPrefs;
-import uk.co.puddle.sleepcontrol.service.SleepIntentService;
+import uk.co.puddle.photoframe.MyAction;
+import uk.co.puddle.photoframe.Logging;
+import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.service.MyNotifications;
+import uk.co.puddle.photoframe.service.SleepIntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -15,7 +15,7 @@ public class Alarms {
     
     private static WakeAlarmReceiver   wakeAlarm   = new WakeAlarmReceiver();
     private static SnoozeAlarmReceiver snoozeAlarm = new SnoozeAlarmReceiver();
-    private static SleepNotifications  notifications = new SleepNotifications();
+    private static MyNotifications  notifications = new MyNotifications();
 
     public static WakeAlarmReceiver getWakeAlarm() {
         return wakeAlarm;
@@ -26,18 +26,18 @@ public class Alarms {
     }
 
     public static void startAlarmsInCurrentMode(Context context) {
-        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
-        Log.i(SleepLogging.TAG, "Alarms; startAlarmsInCurrentMode: currentRunningMode: " + currentRunningMode);
+        RunningMode currentRunningMode = MyPrefs.getCurrentRunningMode(context);
+        Log.i(Logging.TAG, "Alarms; startAlarmsInCurrentMode: currentRunningMode: " + currentRunningMode);
         startAlarms(context, currentRunningMode);
     }
     
     public static void startAlarms(Context context, RunningMode runningMode) {
-        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
+        RunningMode currentRunningMode = MyPrefs.getCurrentRunningMode(context);
         if (currentRunningMode != RunningMode.STOPPED) {
             stopAlarms0(context);
         }
-        Log.d(SleepLogging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
-        SleepPrefs.setIntPref(context, SleepPrefs.PREF_RUNNING_MODE, runningMode.getStorageValue());
+        Log.d(Logging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
+        MyPrefs.setIntPref(context, MyPrefs.PREF_RUNNING_MODE, runningMode.getStorageValue());
 //        Log.d(SleepLogging.TAG, "Alarms; startAlarms; setting running mode to: " + runningMode + " ...");
         switch(runningMode) {
         case STOPPED:
@@ -55,7 +55,7 @@ public class Alarms {
             break;
         }
         notifications.showNotification(context);
-        Log.i(SleepLogging.TAG, "Alarms; started all; running mode now: " + runningMode);
+        Log.i(Logging.TAG, "Alarms; started all; running mode now: " + runningMode);
     }
 
     public static void stopAlarms(Context context) {
@@ -64,22 +64,22 @@ public class Alarms {
     }
     
     private static void stopAlarms0(Context context) {
-        RunningMode currentRunningMode = SleepPrefs.getCurrentRunningMode(context);
+        RunningMode currentRunningMode = MyPrefs.getCurrentRunningMode(context);
         if (currentRunningMode != RunningMode.STOPPED) {
             wakeAlarm.cancelAlarm(context);
             snoozeAlarm.cancelAlarm(context);
             releaseLocks(context);
-            SleepPrefs.setIntPref(context, SleepPrefs.PREF_RUNNING_MODE, RunningMode.STOPPED.getStorageValue());
-            Log.i(SleepLogging.TAG, "Alarms; cleared all; running mode now: " + RunningMode.STOPPED);
+            MyPrefs.setIntPref(context, MyPrefs.PREF_RUNNING_MODE, RunningMode.STOPPED.getStorageValue());
+            Log.i(Logging.TAG, "Alarms; cleared all; running mode now: " + RunningMode.STOPPED);
         }
     }
     
     private static boolean checkForInitialWake(Context context) {
-        int snHours   = SleepPrefs.getIntPref(context, SleepPrefs.PREF_START_SLEEP_TIME_HOURS, 18);
-        int snMinutes = SleepPrefs.getIntPref(context, SleepPrefs.PREF_START_SLEEP_TIME_MINS, 0);
+        int snHours   = MyPrefs.getIntPref(context, MyPrefs.PREF_START_SLEEP_TIME_HOURS, 18);
+        int snMinutes = MyPrefs.getIntPref(context, MyPrefs.PREF_START_SLEEP_TIME_MINS, 0);
 
-        int wkHours   = SleepPrefs.getIntPref(context, SleepPrefs.PREF_END_SLEEP_TIME_HOURS, 18);
-        int wkMinutes = SleepPrefs.getIntPref(context, SleepPrefs.PREF_END_SLEEP_TIME_MINS, 0);
+        int wkHours   = MyPrefs.getIntPref(context, MyPrefs.PREF_END_SLEEP_TIME_HOURS, 18);
+        int wkMinutes = MyPrefs.getIntPref(context, MyPrefs.PREF_END_SLEEP_TIME_MINS, 0);
         
         Calendar snCalendar = getCalendar(snHours, snMinutes);
         Calendar wkCalendar = getCalendar(wkHours, wkMinutes);
@@ -88,8 +88,8 @@ public class Alarms {
         long wake   = wkCalendar.getTimeInMillis();
         long snooze = snCalendar.getTimeInMillis();
         
-        Log.d(SleepLogging.TAG, "Alarms; checkForInitialWake; now: " + now + "; wake: " + wake + "; snooze: " + snooze);
-        Log.d(SleepLogging.TAG, "Alarms; checkForInitialWake; (now >= wake): " + (now >= wake)
+        Log.d(Logging.TAG, "Alarms; checkForInitialWake; now: " + now + "; wake: " + wake + "; snooze: " + snooze);
+        Log.d(Logging.TAG, "Alarms; checkForInitialWake; (now >= wake): " + (now >= wake)
                 + "; (now < snooze): "  + (now < snooze)
                 + "; (snooze < wake): " + (snooze < wake)
                 + "; (now < snooze): "  + (now < snooze));
@@ -115,13 +115,13 @@ public class Alarms {
     }
     
     private static void startInWakeMode(Context context) {
-        Log.i(SleepLogging.TAG, "Alarms; startInWakeMode; sending action: " + SleepAction.INIT_WAKE_UP);
-        Intent intent = new Intent(SleepAction.INIT_WAKE_UP.getActionName(),null,context,SleepIntentService.class); 
+        Log.i(Logging.TAG, "Alarms; startInWakeMode; sending action: " + MyAction.INIT_WAKE_UP);
+        Intent intent = new Intent(MyAction.INIT_WAKE_UP.getActionName(),null,context,SleepIntentService.class); 
         context.startService(intent);
     }
     private static void releaseLocks(Context context) {
-        Log.d(SleepLogging.TAG, "Alarms; sending action: " + SleepAction.RELEASE_LOCKS);
-        Intent intent = new Intent(SleepAction.RELEASE_LOCKS.getActionName(),null,context,SleepIntentService.class); 
+        Log.d(Logging.TAG, "Alarms; sending action: " + MyAction.RELEASE_LOCKS);
+        Intent intent = new Intent(MyAction.RELEASE_LOCKS.getActionName(),null,context,SleepIntentService.class); 
         context.startService(intent);
     }
 }

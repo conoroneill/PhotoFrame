@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="uk.co.puddle.sleepcontrol"
+    package="uk.co.puddle.photoframe"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -17,13 +17,12 @@
         android:allowBackup="true"
         android:icon="@drawable/pictures_icon_128"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
+        android:theme="@android:style/Theme.DeviceDefault"
         android:largeHeap="true"
-        >
+        > <!--  was: android:theme="@style/AppTheme" -->
         <activity
-            android:name=".SleepControlActivity"
+            android:name="uk.co.puddle.photoframe.PhotoControlActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.DeviceDefault"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,30 +30,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PhotoActivity"
+            android:name="uk.co.puddle.photoframe.PhotoActivity"
             android:label="@string/photo_activity_name"
             >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name="uk.co.puddle.photoframe.prefs.SettingsActivity"
             android:label="@string/settings_activity_name"
-            android:theme="@android:style/Theme.DeviceDefault"
             >
         </activity>
         <activity
-            android:name=".HelpActivity"
+            android:name="uk.co.puddle.photoframe.HelpActivity"
             android:label="@string/help_activity_name"
-            android:theme="@android:style/Theme.DeviceDefault"
             >
         </activity>
-        <receiver android:name="uk.co.puddle.sleepcontrol.alarms.WakeAlarmReceiver"/>
-        <receiver android:name="uk.co.puddle.sleepcontrol.alarms.SnoozeAlarmReceiver"/>
-        <receiver android:name="uk.co.puddle.sleepcontrol.alarms.BootReceiver" android:enabled="false">
+        <receiver android:name="uk.co.puddle.photoframe.alarms.WakeAlarmReceiver"/>
+        <receiver android:name="uk.co.puddle.photoframe.alarms.SnoozeAlarmReceiver"/>
+        <receiver android:name="uk.co.puddle.photoframe.alarms.BootReceiver" android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <service android:name="uk.co.puddle.sleepcontrol.service.SleepIntentService" />
+        <service android:name="uk.co.puddle.photoframe.service.SleepIntentService" />
     </application>
 
 </manifest>

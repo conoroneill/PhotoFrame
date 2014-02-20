@@ -1,4 +1,4 @@
-package uk.co.puddle.sleepcontrol.photos;
+package uk.co.puddle.photoframe.photos;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

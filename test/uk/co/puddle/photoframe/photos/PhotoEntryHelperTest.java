@@ -1,4 +1,4 @@
-package uk.co.puddle.sleepcontrol.photos;
+package uk.co.puddle.photoframe.photos;
 
 import org.junit.Test;
 

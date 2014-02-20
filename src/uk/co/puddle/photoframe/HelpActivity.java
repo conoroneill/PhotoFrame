@@ -1,4 +1,4 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
 import android.app.Activity;
 import android.os.Bundle;

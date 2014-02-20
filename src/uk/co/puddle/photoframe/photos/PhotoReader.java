@@ -1,10 +1,10 @@
-package uk.co.puddle.sleepcontrol.photos;
+package uk.co.puddle.photoframe.photos;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.puddle.sleepcontrol.SleepLogging;
+import uk.co.puddle.photoframe.Logging;
 import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
@@ -24,11 +24,11 @@ public class PhotoReader {
     public List<PhotoEntry> list(Context context) {
         boolean readable = isExternalStorageReadable();
         if (!readable) {
-            Log.i(SleepLogging.TAG, "PhotoReader: readable: " + readable + "; no images");
+            Log.i(Logging.TAG, "PhotoReader: readable: " + readable + "; no images");
             return new ArrayList<PhotoEntry>();
         }
         File dir = Environment.getExternalStorageDirectory();
-        Log.d(SleepLogging.TAG, "PhotoReader: externalDirName: dir: " + dir);
+        Log.d(Logging.TAG, "PhotoReader: externalDirName: dir: " + dir);
         listSubDir(Environment.DIRECTORY_PICTURES);
         listSubDir(Environment.DIRECTORY_MUSIC);
         listSubDir(Environment.DIRECTORY_DCIM);
@@ -39,13 +39,13 @@ public class PhotoReader {
 
     private void listSubDir(String subDirName) {
         File dir = Environment.getExternalStoragePublicDirectory(subDirName);
-        Log.d(SleepLogging.TAG, "PhotoReader: subDirName: " + subDirName + "; dir: " + dir);
+        Log.d(Logging.TAG, "PhotoReader: subDirName: " + subDirName + "; dir: " + dir);
         File[] files = dir.listFiles();
         if (files == null) {
-            Log.d(SleepLogging.TAG, "PhotoReader: listFiles returned null");
+            Log.d(Logging.TAG, "PhotoReader: listFiles returned null");
         } else {
             for (File file : files) {
-                Log.d(SleepLogging.TAG, "PhotoReader: file: " + file);
+                Log.d(Logging.TAG, "PhotoReader: file: " + file);
             }
         }
     }

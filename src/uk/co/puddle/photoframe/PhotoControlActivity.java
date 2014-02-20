@@ -1,6 +1,10 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
 import java.util.Locale;
+
+import uk.co.puddle.photoframe.R;
+import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.prefs.SettingsActivity;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -16,7 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class SleepControlActivity extends FragmentActivity implements
+public class PhotoControlActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
 	/**
@@ -75,7 +79,7 @@ public class SleepControlActivity extends FragmentActivity implements
 					.setText(mSectionsPagerAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
-        int tabPosition = SleepPrefs.getIntPref(this, SleepPrefs.PREF_TAB_POSITION, 0);
+        int tabPosition = MyPrefs.getIntPref(this, MyPrefs.PREF_TAB_POSITION, 0);
         mViewPager.setCurrentItem(tabPosition);
 	}
 	
@@ -102,13 +106,13 @@ public class SleepControlActivity extends FragmentActivity implements
 	}
 	
     private void showSettings() {
-        Log.d(SleepLogging.TAG, "showSettings");
+        Log.d(Logging.TAG, "showSettings");
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
     
     private void showHelp() {
-        Log.d(SleepLogging.TAG, "showHelp");
+        Log.d(Logging.TAG, "showHelp");
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
     }
@@ -119,8 +123,8 @@ public class SleepControlActivity extends FragmentActivity implements
 		// When the given tab is selected, switch to the corresponding page in
 		// the ViewPager.
 		mViewPager.setCurrentItem(tab.getPosition());
-        SleepPrefs.setIntPref(this, SleepPrefs.PREF_TAB_POSITION, tab.getPosition());
-        Log.d(SleepLogging.TAG, "selectedTab; set to: " + tab.getPosition());
+        MyPrefs.setIntPref(this, MyPrefs.PREF_TAB_POSITION, tab.getPosition());
+        Log.d(Logging.TAG, "selectedTab; set to: " + tab.getPosition());
 	}
 
 	@Override
@@ -152,8 +156,8 @@ public class SleepControlActivity extends FragmentActivity implements
 			String argName = null;
 			switch(position) {
 			case 0:
-                fragment = new SleepFrontFragment();
-                argName = SleepFrontFragment.ARG_SECTION_NUMBER;
+                fragment = new PhotoFrontFragment();
+                argName = PhotoFrontFragment.ARG_SECTION_NUMBER;
                 break;
 			case 1:
                 fragment = new SleepTimingsFragment();

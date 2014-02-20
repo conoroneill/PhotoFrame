@@ -1,10 +1,10 @@
-package uk.co.puddle.sleepcontrol.alarms;
+package uk.co.puddle.photoframe.alarms;
 
 import java.util.Calendar;
 
-import uk.co.puddle.sleepcontrol.SleepAction;
-import uk.co.puddle.sleepcontrol.SleepLogging;
-import uk.co.puddle.sleepcontrol.service.SleepIntentService;
+import uk.co.puddle.photoframe.MyAction;
+import uk.co.puddle.photoframe.Logging;
+import uk.co.puddle.photoframe.service.SleepIntentService;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -38,7 +38,7 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {   
-        Log.d(SleepLogging.TAG, "BaseAlarmReceiver; onReceive; " + getAlarmName() + " ...");
+        Log.d(Logging.TAG, "BaseAlarmReceiver; onReceive; " + getAlarmName() + " ...");
         // BEGIN_INCLUDE(alarm_onreceive)
         /* 
          * If your receiver intent includes extras that need to be passed along to the
@@ -81,7 +81,7 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
      */
     public void startAlarm(Context context) {
         
-        Log.d(SleepLogging.TAG, "startAlarm: " + getAlarmName() + " ...");
+        Log.d(Logging.TAG, "startAlarm: " + getAlarmName() + " ...");
         alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, this.getClass());
         intent.setAction(getActionToTrigger().getActionName());
@@ -107,7 +107,7 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
      * Get the action to be passed through to the service when the alarm triggers.
      * @return name of the action.
      */
-    protected abstract SleepAction getActionToTrigger();
+    protected abstract MyAction getActionToTrigger();
 
     /**
      * Set the alarm wake up.
@@ -116,7 +116,7 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
     protected abstract void setAlarmTriggerTime(Context context);
     
     protected void setAlarmTriggerInterval(int delay) {
-        Log.i(SleepLogging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; delay: " + delay + " secs ...");
+        Log.i(Logging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; delay: " + delay + " secs ...");
         getAlarmMgr().set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
                 SystemClock.elapsedRealtime() +
                 delay*1000, getAlarmIntent());
@@ -135,12 +135,12 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
         if (now > then) {
             // the trigger time is earlier in the day than 'now', so we must mean tomorrow
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
-            Log.i(SleepLogging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; hours:mins: " + hours + ":" + minutes + " TOMORROW!");
+            Log.i(Logging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; hours:mins: " + hours + ":" + minutes + " TOMORROW!");
         }
 
         // Set the alarm to fire at the specified time, according to the device's
         // clock, and to repeat once a day.
-        Log.i(SleepLogging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; hours:mins: " + hours + ":" + minutes);
+        Log.i(Logging.TAG, "BaseAlarmReceiver; " + getAlarmName() + "; setAlarm; hours:mins: " + hours + ":" + minutes);
         getAlarmMgr().setRepeating(AlarmManager.RTC_WAKEUP,  
                 calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, getAlarmIntent());
     }
@@ -154,7 +154,7 @@ public abstract class BaseAlarmReceiver extends WakefulBroadcastReceiver {
         // If the alarm has been set, cancel it.
         if (alarmMgr!= null) {
             alarmMgr.cancel(alarmIntent);
-            Log.i(SleepLogging.TAG, "BaseAlarmReceiver; cancelAlarm: " + getAlarmName() + " ...");
+            Log.i(Logging.TAG, "BaseAlarmReceiver; cancelAlarm: " + getAlarmName() + " ...");
             countExistingAlarms--;
         }
         

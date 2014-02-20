@@ -1,10 +1,10 @@
-package uk.co.puddle.sleepcontrol.photos;
+package uk.co.puddle.photoframe.photos;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.puddle.sleepcontrol.SleepLogging;
+import uk.co.puddle.photoframe.Logging;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -54,20 +54,20 @@ public class PhotoHelper1 {
         if (isUseAllImages()) {
             images = getAllImages(context);
         } else {
-            Log.d(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
-            Log.d(SleepLogging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
+            Log.d(Logging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_NAME: " + CAMERA_IMAGE_BUCKET_NAME);
+            Log.d(Logging.TAG, "PhotoHelper1: CAMERA_IMAGE_BUCKET_ID: " + CAMERA_IMAGE_BUCKET_ID);
             images = getCameraImages(context, CAMERA_IMAGE_BUCKET_ID);
-            Log.i(SleepLogging.TAG, "PhotoReader: camera images: " + images.size());
+            Log.i(Logging.TAG, "PhotoReader: camera images: " + images.size());
             
-            Log.d(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
-            Log.d(SleepLogging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
+            Log.d(Logging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_NAME: " + PHOTO_IMAGE_BUCKET_NAME);
+            Log.d(Logging.TAG, "PhotoHelper1: PHOTO_IMAGE_BUCKET_ID: " + PHOTO_IMAGE_BUCKET_ID);
 
             images.addAll(getCameraImages(context, PHOTO_IMAGE_BUCKET_ID));
-            Log.i(SleepLogging.TAG, "PhotoReader: photo images: " + images.size());
+            Log.i(Logging.TAG, "PhotoReader: photo images: " + images.size());
         }
-        Log.i(SleepLogging.TAG, "PhotoReader: images: " + images.size());
+        Log.i(Logging.TAG, "PhotoReader: images: " + images.size());
         for (PhotoEntry image : images) {
-            Log.d(SleepLogging.TAG, "PhotoReader: image: " + image);
+            Log.d(Logging.TAG, "PhotoReader: image: " + image);
         }
         return images;
     }
@@ -96,7 +96,7 @@ public class PhotoHelper1 {
     }
 
     public static List<PhotoEntry> getAllImages(Context context) {
-        Log.d(SleepLogging.TAG, "PhotoHelper1: getAllImages ...");
+        Log.d(Logging.TAG, "PhotoHelper1: getAllImages ...");
         final String[] projection = { MediaStore.Images.Media.DATA,
                 MediaStore.Images.Media.DATE_TAKEN,
                 MediaStore.Images.Media.DISPLAY_NAME,
@@ -124,7 +124,7 @@ public class PhotoHelper1 {
                 final String bucketName = cursor.getString(bucketNameColumn);
                 final String bucketId   = cursor.getString(bucketIdColumn);
                 final String thumb     = cursor.getString(thumbColumn);
-                Log.d(SleepLogging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data
+                Log.d(Logging.TAG, "PhotoHelper1: name: " + display + "; date: " + date + "; data: " + data
                         + "; bucket: " + bucketName + "; id: " + bucketId + "; th: " + thumb);
                 PhotoEntry photoEntry = new PhotoEntry();
                 photoEntry.withName(display).withData(data).withDate(date);

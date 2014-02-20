@@ -1,10 +1,12 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
 import java.util.List;
 
-import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
-import uk.co.puddle.sleepcontrol.photos.PhotoOrder;
-import uk.co.puddle.sleepcontrol.photos.PhotoReader;
+import uk.co.puddle.photoframe.photos.PhotoEntry;
+import uk.co.puddle.photoframe.photos.PhotoOrder;
+import uk.co.puddle.photoframe.photos.PhotoReader;
+import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -51,26 +53,26 @@ public class PhotoActivity extends Activity {
         
         Bundle receiveBundle = this.getIntent().getExtras();
         int count = receiveBundle.getInt("count");
-        Log.d(SleepLogging.TAG, "PhotoActivity; starting show photos; count: " + count);
+        Log.d(Logging.TAG, "PhotoActivity; starting show photos; count: " + count);
         String photoData = receiveBundle.getString("photo_data");
-        Log.d(SleepLogging.TAG, "PhotoActivity; photoData: " + photoData);
+        Log.d(Logging.TAG, "PhotoActivity; photoData: " + photoData);
         //String thumb = receiveBundle.getString("photo_thumb");
         //Log.i(SleepLogging.TAG, "PhotoActivity; thumb: " + thumb);
         
-        String delaySecs = SleepPrefs.getStringPrefFromSettings(this, SleepPrefs.PREF_DELAY_SECS, "10");
-        Log.d(SleepLogging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
+        String delaySecs = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DELAY_SECS, "10");
+        Log.d(Logging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
         tickerTimeout = Integer.parseInt(delaySecs) * 1000;
         
 //        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
 //        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
-        String orderValue = SleepPrefs.getStringPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_ORDER, "");
+        String orderValue = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DISPLAY_ORDER, "");
         photoOrder = PhotoOrder.fromValue(orderValue);
     }
     
     
     @Override
     protected void onStart() {
-        Log.i(SleepLogging.TAG, "PhotoActivity; onStart...");
+        Log.i(Logging.TAG, "PhotoActivity; onStart...");
         super.onStart();
 
         refreshPhotos();
@@ -82,14 +84,14 @@ public class PhotoActivity extends Activity {
 
     @Override
     protected void onRestart() {
-        Log.d(SleepLogging.TAG, "PhotoActivity; onRestart...");
+        Log.d(Logging.TAG, "PhotoActivity; onRestart...");
         super.onRestart();
     }
 
     @Override
     protected void onResume() {
         // Now in the foreground
-        Log.i(SleepLogging.TAG, "PhotoActivity; onResume...");
+        Log.i(Logging.TAG, "PhotoActivity; onResume...");
         super.onResume();
         setupBroadcastReceiver();
     }
@@ -97,21 +99,21 @@ public class PhotoActivity extends Activity {
     @Override
     protected void onPause() {
         // No longer in the foreground
-        Log.i(SleepLogging.TAG, "PhotoActivity; onPause...");
+        Log.i(Logging.TAG, "PhotoActivity; onPause...");
         cleardownBroadcastReceiver();
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        Log.i(SleepLogging.TAG, "PhotoActivity; onStop...");
+        Log.i(Logging.TAG, "PhotoActivity; onStop...");
         super.onStop();
         stopIntervalTimer();
     }
 
     @Override
     protected void onDestroy() {
-        Log.d(SleepLogging.TAG, "PhotoActivity; onDestroy...");
+        Log.d(Logging.TAG, "PhotoActivity; onDestroy...");
         super.onDestroy();
     }
 
@@ -122,7 +124,7 @@ public class PhotoActivity extends Activity {
     
     private void showPhoto(int num) {
         PhotoEntry photoEntry = images.get(num);
-        Log.i(SleepLogging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
+        Log.i(Logging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
         ImageView imgView = (ImageView)findViewById(R.id.imageView);
         
@@ -152,7 +154,7 @@ public class PhotoActivity extends Activity {
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, width, height);
-        Log.d(SleepLogging.TAG, "getBitmapForView; width: " + width + "; height: " + height + "; sampleSize: " + options.inSampleSize);
+        Log.d(Logging.TAG, "getBitmapForView; width: " + width + "; height: " + height + "; sampleSize: " + options.inSampleSize);
 
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
@@ -205,8 +207,8 @@ public class PhotoActivity extends Activity {
         br = new BroadcastReceiver() {
             @Override
             public void onReceive(Context paramContext, Intent paramIntent) {
-                SleepAction action = SleepAction.fromActionName(paramIntent.getAction());
-                Log.i(SleepLogging.TAG, "PhotoActivity; onReceive: " + action);
+                MyAction action = MyAction.fromActionName(paramIntent.getAction());
+                Log.i(Logging.TAG, "PhotoActivity; onReceive: " + action);
                 switch (action) {
                 case WAKE_UP_SCREEN:
                     if (tickerRunnable == null) { // we must be currently paused
@@ -223,8 +225,8 @@ public class PhotoActivity extends Activity {
             }
         };
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(SleepAction.WAKE_UP_SCREEN.getActionName());
-        intentFilter.addAction(SleepAction.SNOOZE_SCREEN.getActionName());
+        intentFilter.addAction(MyAction.WAKE_UP_SCREEN.getActionName());
+        intentFilter.addAction(MyAction.SNOOZE_SCREEN.getActionName());
         lbm.registerReceiver(br, intentFilter);
     }
     
@@ -248,12 +250,12 @@ public class PhotoActivity extends Activity {
                 nextPhoto();
             }
         };
-        Log.d(SleepLogging.TAG, "PhotoActivity; createTickerRunnable; created: " + tickerRunnable);
+        Log.d(Logging.TAG, "PhotoActivity; createTickerRunnable; created: " + tickerRunnable);
     }
     
     private void stopIntervalTimer() {
         if (tickerRunnable != null) {
-            Log.i(SleepLogging.TAG, "PhotoActivity; stopIntervalTimer; removing tickerRunnable");
+            Log.i(Logging.TAG, "PhotoActivity; stopIntervalTimer; removing tickerRunnable");
             handler.removeCallbacks(tickerRunnable);
         }
         tickerRunnable = null;

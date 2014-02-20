@@ -1,5 +1,6 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
+import uk.co.puddle.photoframe.R;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;

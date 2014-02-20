@@ -1,11 +1,13 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
 import java.util.List;
 
-import uk.co.puddle.sleepcontrol.alarms.Alarms;
-import uk.co.puddle.sleepcontrol.alarms.RunningMode;
-import uk.co.puddle.sleepcontrol.photos.PhotoEntry;
-import uk.co.puddle.sleepcontrol.photos.PhotoReader;
+import uk.co.puddle.photoframe.alarms.Alarms;
+import uk.co.puddle.photoframe.alarms.RunningMode;
+import uk.co.puddle.photoframe.photos.PhotoEntry;
+import uk.co.puddle.photoframe.photos.PhotoReader;
+import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class SleepFrontFragment extends Fragment {
+public class PhotoFrontFragment extends Fragment {
 
     /**
      * The fragment argument representing the section number for this
@@ -30,7 +32,7 @@ public class SleepFrontFragment extends Fragment {
 
     private List<PhotoEntry> images;
 
-    public SleepFrontFragment() {
+    public PhotoFrontFragment() {
     }
 
     @Override
@@ -106,8 +108,8 @@ public class SleepFrontFragment extends Fragment {
                 sb.append('\n');
             }
         }
-        boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
-        boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
+        boolean enabledNow  = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        boolean enabledTime = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_TIMED_SLEEP, false);
         sb.append("Timers: Daily: " + enabledTime + "; Now: " + enabledNow);
         
         photoTextView.setText(sb.toString());
@@ -115,7 +117,7 @@ public class SleepFrontFragment extends Fragment {
 
     private void showPhotos() {
         int count = images.size();
-        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting show photos; count: " + count);
+        Log.i(Logging.TAG, "SleepFrontFragment; starting show photos; count: " + count);
         
         Intent intent = new Intent(this.getActivity(), PhotoActivity.class);
         Bundle sendBundle = new Bundle();
@@ -130,9 +132,9 @@ public class SleepFrontFragment extends Fragment {
     }
     
     private void invokeSleep() {
-        boolean enabledNow  = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
-        boolean enabledTime = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_TIMED_SLEEP, false);
-        Log.i(SleepLogging.TAG, "SleepFrontFragment; starting; Daily: " + enabledTime + "; Now: " + enabledNow);
+        boolean enabledNow  = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        boolean enabledTime = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_TIMED_SLEEP, false);
+        Log.i(Logging.TAG, "SleepFrontFragment; starting; Daily: " + enabledTime + "; Now: " + enabledNow);
         if (enabledNow) {
             Alarms.startAlarms(getActivity(), RunningMode.INTERVALS);
         } else if (enabledTime) {
@@ -142,7 +144,7 @@ public class SleepFrontFragment extends Fragment {
     }
     
     private void stopSleep() {
-        Log.i(SleepLogging.TAG, "SleepFrontFragment; stop sleep now");
+        Log.i(Logging.TAG, "SleepFrontFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
     }
 

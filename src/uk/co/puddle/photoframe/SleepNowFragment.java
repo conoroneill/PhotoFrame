@@ -1,7 +1,9 @@
-package uk.co.puddle.sleepcontrol;
+package uk.co.puddle.photoframe;
 
-import uk.co.puddle.sleepcontrol.alarms.Alarms;
-import uk.co.puddle.sleepcontrol.alarms.RunningMode;
+import uk.co.puddle.photoframe.alarms.Alarms;
+import uk.co.puddle.photoframe.alarms.RunningMode;
+import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,8 +25,8 @@ public class SleepNowFragment extends Fragment {
      */
     public static final String ARG_SECTION_NUMBER = "section_number";
 
-    private int delayBeforeSleep = SleepPrefs.DEFAULT_WAKE_INTERVAL;
-    private int delayBeforeWake  = SleepPrefs.DEFAULT_SNOOZE_INTERVAL;
+    private int delayBeforeSleep = MyPrefs.DEFAULT_WAKE_INTERVAL;
+    private int delayBeforeWake  = MyPrefs.DEFAULT_SNOOZE_INTERVAL;
     
     public SleepNowFragment() {
     }
@@ -49,8 +51,8 @@ public class SleepNowFragment extends Fragment {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 delayBeforeSleep = newVal;
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
-                Log.d(SleepLogging.TAG, "delayBeforeSleepNumberPicker; set to: " + delayBeforeSleep);
+                MyPrefs.setIntPref(getActivity(), MyPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
+                Log.d(Logging.TAG, "delayBeforeSleepNumberPicker; set to: " + delayBeforeSleep);
             }
         });
         NumberPicker delayBeforeWakeNumberPicker = (NumberPicker) rootView.findViewById(R.id.delayBeforeWakeNumberPicker);
@@ -58,16 +60,16 @@ public class SleepNowFragment extends Fragment {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 delayBeforeWake = newVal;
-                SleepPrefs.setIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_WAKE, delayBeforeWake);
-                Log.d(SleepLogging.TAG, "delayBeforeWakeNumberPicker; set to: " + delayBeforeWake);
+                MyPrefs.setIntPref(getActivity(), MyPrefs.PREF_DELAY_BEFORE_WAKE, delayBeforeWake);
+                Log.d(Logging.TAG, "delayBeforeWakeNumberPicker; set to: " + delayBeforeWake);
             }
         });
         CheckBox enabledCheckBox = (CheckBox)rootView.findViewById(R.id.sleepNowEnabledCheckBox);
         enabledCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                SleepPrefs.setBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, isChecked);
-                Log.d(SleepLogging.TAG, "enabledCheckBox; (now) set to: " + isChecked);
+                MyPrefs.setBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_NOW_SLEEP, isChecked);
+                Log.d(Logging.TAG, "enabledCheckBox; (now) set to: " + isChecked);
                 enableDisablePageElements(rootView, isChecked);
             }
         });
@@ -87,15 +89,15 @@ public class SleepNowFragment extends Fragment {
                 stopSleep();
             }
         });
-        boolean enabled = SleepPrefs.getBooleanPref(getActivity(), SleepPrefs.PREF_ENABLE_NOW_SLEEP, false);
+        boolean enabled = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_NOW_SLEEP, false);
         enabledCheckBox.setChecked(enabled);
-        Log.d(SleepLogging.TAG, "enabledCheckBox; (now); initialised to: " + enabled);
+        Log.d(Logging.TAG, "enabledCheckBox; (now); initialised to: " + enabled);
 
 
-        delayBeforeSleep = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
-        delayBeforeWake  = SleepPrefs.getIntPref(getActivity(), SleepPrefs.PREF_DELAY_BEFORE_WAKE,  delayBeforeWake);
-        Log.d(SleepLogging.TAG, "delayBeforeSleepNumberPicker; init: " + delayBeforeSleep);
-        Log.d(SleepLogging.TAG, "delayBeforeWakeNumberPicker; init: " + delayBeforeWake);
+        delayBeforeSleep = MyPrefs.getIntPref(getActivity(), MyPrefs.PREF_DELAY_BEFORE_SLEEP, delayBeforeSleep);
+        delayBeforeWake  = MyPrefs.getIntPref(getActivity(), MyPrefs.PREF_DELAY_BEFORE_WAKE,  delayBeforeWake);
+        Log.d(Logging.TAG, "delayBeforeSleepNumberPicker; init: " + delayBeforeSleep);
+        Log.d(Logging.TAG, "delayBeforeWakeNumberPicker; init: " + delayBeforeWake);
         delayBeforeSleepNumberPicker.setMinValue(0);
         delayBeforeSleepNumberPicker.setMaxValue(60);
         delayBeforeSleepNumberPicker.setValue(delayBeforeSleep);
@@ -107,12 +109,12 @@ public class SleepNowFragment extends Fragment {
 }
     
     private void invokeSleep() {
-        Log.i(SleepLogging.TAG, "SleepNowFragment; starting; delayBeforeSleep: " + delayBeforeSleep + "; delayBeforeWake: " + delayBeforeWake);
+        Log.i(Logging.TAG, "SleepNowFragment; starting; delayBeforeSleep: " + delayBeforeSleep + "; delayBeforeWake: " + delayBeforeWake);
         Alarms.startAlarms(getActivity(), RunningMode.INTERVALS);
     }
     
     private void stopSleep() {
-        Log.i(SleepLogging.TAG, "SleepNowFragment; stop sleep now");
+        Log.i(Logging.TAG, "SleepNowFragment; stop sleep now");
         Alarms.stopAlarms(getActivity());
     }
 
