@@ -6,6 +6,7 @@ import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.storage.Storage;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -88,14 +89,14 @@ public class PhotoActivity extends Activity {
 
         TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
         String textFontSize = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_FONT_SIZE, "20");
-        Log.i(Logging.TAG, "PhotoActivity; textFontSize: " + textFontSize);
+        Log.d(Logging.TAG, "PhotoActivity; textFontSize: " + textFontSize);
         int fontSize = Integer.parseInt(textFontSize);
         myImageViewText.setTextSize(fontSize);
 
         String textFontColor = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_FONT_COLOR, "RED");
         long colorl = Long.parseLong(textFontColor,16);
         int color = (int)(colorl & 0xffffffff);
-        Log.i(Logging.TAG, "PhotoActivity; textFontColor: " + textFontColor + " (" + color + "); (RED=" + Color.RED + ")");
+        Log.d(Logging.TAG, "PhotoActivity; textFontColor: " + textFontColor + " (" + color + "); (RED=" + Color.RED + ")");
         myImageViewText.setTextColor(color);
     }
 
@@ -136,7 +137,9 @@ public class PhotoActivity extends Activity {
 
     private void refreshPhotos() {
         images = new PhotoReader().list(this);
-        currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
+        //currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
+        currentPhoto = new Storage().getIntProperty(this, Storage.CURRENT_SEQ_KEY, -1);
+        clipSequenceToRange();
     }
     
     private void showPhoto(int num) {
@@ -288,14 +291,19 @@ public class PhotoActivity extends Activity {
         switch (photoOrder) {
         case SEQUENTIAL:
             currentPhoto++;
-            if (currentPhoto >= images.size()) {
-                currentPhoto = 0;
-            }
+            clipSequenceToRange();
+            new Storage().saveIntProperty(this, Storage.CURRENT_SEQ_KEY, currentPhoto);
             break;
         case RANDOM:
             double r = Math.random();
             currentPhoto = (int)Math.floor(images.size() * r);
             break;
+        }
+    }
+
+    private void clipSequenceToRange() {
+        if (currentPhoto < 0 || currentPhoto >= images.size()) {
+            currentPhoto = 0;
         }
     }
 }

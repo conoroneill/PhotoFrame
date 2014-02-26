@@ -16,8 +16,6 @@
 
 *) Add an auto restart on reboot, optional
 
-*) Persist the sequence count
-
 *) Double random sort order - random folder, then all within that folder, but random order
 
 *) Background thread to turn image into bitmap
