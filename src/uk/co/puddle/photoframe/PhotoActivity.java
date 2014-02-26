@@ -6,7 +6,6 @@ import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
-import uk.co.puddle.photoframe.R;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
@@ -59,6 +59,24 @@ public class PhotoActivity extends Activity {
         //String thumb = receiveBundle.getString("photo_thumb");
         //Log.i(SleepLogging.TAG, "PhotoActivity; thumb: " + thumb);
         
+    }
+    
+    
+    @Override
+    protected void onStart() {
+        Log.i(Logging.TAG, "PhotoActivity; onStart...");
+        super.onStart();
+        
+        pickupPrefs();
+
+        refreshPhotos();
+        nextPhotoNumber();
+        showPhoto(currentPhoto);
+
+        startIntervalTimer();
+    }
+    
+    private void pickupPrefs() {
         String delaySecs = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DELAY_SECS, "10");
         Log.d(Logging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
         tickerTimeout = Integer.parseInt(delaySecs) * 1000;
@@ -67,19 +85,18 @@ public class PhotoActivity extends Activity {
 //        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
         String orderValue = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DISPLAY_ORDER, "");
         photoOrder = PhotoOrder.fromValue(orderValue);
-    }
-    
-    
-    @Override
-    protected void onStart() {
-        Log.i(Logging.TAG, "PhotoActivity; onStart...");
-        super.onStart();
 
-        refreshPhotos();
-        nextPhotoNumber();
-        showPhoto(currentPhoto);
+        TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
+        String textFontSize = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_FONT_SIZE, "20");
+        Log.i(Logging.TAG, "PhotoActivity; textFontSize: " + textFontSize);
+        int fontSize = Integer.parseInt(textFontSize);
+        myImageViewText.setTextSize(fontSize);
 
-        startIntervalTimer();
+        String textFontColor = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_FONT_COLOR, "RED");
+        long colorl = Long.parseLong(textFontColor,16);
+        int color = (int)(colorl & 0xffffffff);
+        Log.i(Logging.TAG, "PhotoActivity; textFontColor: " + textFontColor + " (" + color + "); (RED=" + Color.RED + ")");
+        myImageViewText.setTextColor(color);
     }
 
     @Override

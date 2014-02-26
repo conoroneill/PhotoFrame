@@ -61,6 +61,26 @@
     <string name="display_order_value_default">RANDOM</string>
     <string name="pref_display_order_summary_pt1">Currently using</string>
     <string name="pref_display_order_summary_pt2">order</string>
+    <string name="pref_text_display">Text Display settings</string>
+    <string name="pref_text_font_size">Font size (pixels)</string>
+    <string name="pref_text_font_size_summary_pt1">Font size is</string>
+    <string name="pref_text_font_size_summary_pt2">pixels</string>
+    <string name="pref_font_color">Text Color</string>
+    <string-array name="font_color_labels">
+        <item>RED</item>
+        <item>GREEN</item>
+        <item>WHITE</item>
+        <item>BLACK</item>
+    </string-array>
+    <string-array name="font_color_values">
+        <item>FFFF0000</item>
+        <item>FF00FF00</item>
+        <item>FFFFFFFF</item>
+        <item>FF000000</item>
+    </string-array>
+    <string name="font_color_value_default">FFFF0000</string>
+    <string name="pref_font_color_summary_pt1">Text Color is</string>
+    <string name="pref_font_color_summary_pt2"></string>
     
     <!--  Help page -->
     <string name="help_activity_name">Help</string>

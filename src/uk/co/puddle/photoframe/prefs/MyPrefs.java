@@ -24,6 +24,8 @@ public class MyPrefs {
     public static final String PREF_DELAY_SECS = "pref.delay.secs";
     public static final String PREF_DISPLAY_ORDER = "pref.display.order";
     //public static final String PREF_DISPLAY_RANDOM = "pref.display.random";
+    public static final String PREF_FONT_SIZE = "pref.font.size";
+    public static final String PREF_FONT_COLOR = "pref.font.color";
     
     public static final int DEFAULT_WAKE_INTERVAL   = 20; // for 'now' timer; secs
     public static final int DEFAULT_SNOOZE_INTERVAL = 20; // for 'now' timer; secs

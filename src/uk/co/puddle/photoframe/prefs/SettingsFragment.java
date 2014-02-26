@@ -2,9 +2,6 @@ package uk.co.puddle.photoframe.prefs;
 
 import uk.co.puddle.photoframe.Logging;
 import uk.co.puddle.photoframe.R;
-import uk.co.puddle.photoframe.R.array;
-import uk.co.puddle.photoframe.R.string;
-import uk.co.puddle.photoframe.R.xml;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -27,6 +24,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         onSharedPreferenceChanged(sharedPref, MyPrefs.PREF_DELAY_SECS);
         onSharedPreferenceChanged(sharedPref, MyPrefs.PREF_DISPLAY_ORDER);
+        onSharedPreferenceChanged(sharedPref, MyPrefs.PREF_FONT_SIZE);
+        onSharedPreferenceChanged(sharedPref, MyPrefs.PREF_FONT_COLOR);
     }
 
     @Override
@@ -51,12 +50,40 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
             String msg = pt1 + " " + currentLabel + " " + pt2;
             Log.d(Logging.TAG, msg);
             orderPref.setSummary(msg);
+        } else if (key.equals(MyPrefs.PREF_FONT_SIZE)) {
+            Preference fontSizePref = findPreference(key);
+            
+            String currentValue = sharedPreferences.getString(key, "");
+            String pt1 = getResources().getString(R.string.pref_text_font_size_summary_pt1);
+            String pt2 = getResources().getString(R.string.pref_text_font_size_summary_pt2);
+            String msg = pt1 + " " + currentValue + " " + pt2;
+            Log.d(Logging.TAG, msg);
+            fontSizePref.setSummary(msg);
+        } else if (key.equals(MyPrefs.PREF_FONT_COLOR)) {
+            Preference colorPref = findPreference(key);
+            
+            String currentValue = sharedPreferences.getString(key, "");
+            String currentLabel = getCurrentColorLabel(currentValue);
+            String pt1 = getResources().getString(R.string.pref_font_color_summary_pt1);
+            String pt2 = getResources().getString(R.string.pref_font_color_summary_pt2);
+            String msg = pt1 + " " + currentLabel + " " + pt2;
+            Log.d(Logging.TAG, msg);
+            colorPref.setSummary(msg);
         }
     }
     
     private String getCurrentOrderLabel(String currentValue) {
         String values[] = getResources().getStringArray(R.array.display_order_values);
         String labels[] = getResources().getStringArray(R.array.display_order_labels);
+        for (int i = 0; i < values.length; i++) {
+            if (values[i].equals(currentValue)) { return labels[i]; }
+        }
+        return "Unknown";
+    }
+
+    private String getCurrentColorLabel(String currentValue) {
+        String values[] = getResources().getStringArray(R.array.font_color_values);
+        String labels[] = getResources().getStringArray(R.array.font_color_labels);
         for (int i = 0; i < values.length; i++) {
             if (values[i].equals(currentValue)) { return labels[i]; }
         }

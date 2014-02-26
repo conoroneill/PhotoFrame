@@ -1,6 +1,6 @@
-*) Rename app to Photo Frame with timer (or similar)
+*) Test screen rotation, and activity lifecycle/saving settings. F12 on emulator!
 
-*) Put in a better icon. Eg: http://www.iconspedia.com/icon/photos-rounded-icon-29106.html 
+*) Do proper full-screen for images
 
 *) Get the Unit tests working
 
@@ -23,3 +23,4 @@
 *) Background thread to turn image into bitmap
 
 *) Background thread for initial count of photos
+

@@ -25,4 +25,21 @@
         android:entryValues="@array/display_order_values"
         android:defaultValue="@string/display_order_value_default" />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_text_display"
+        android:key="pref_text_display_settings"
+        >
+        <EditTextPreference
+        android:key="pref.font.size"
+        android:title="@string/pref_text_font_size"
+        android:inputType="number"
+        android:defaultValue="20" />
+        <ListPreference
+        android:key="pref.font.color"
+        android:title="@string/pref_font_color"
+        android:dialogTitle="@string/pref_font_color"
+        android:entries="@array/font_color_labels"
+        android:entryValues="@array/font_color_values"
+        android:defaultValue="@string/font_color_value_default" />
+    </PreferenceCategory>
 </PreferenceScreen>
