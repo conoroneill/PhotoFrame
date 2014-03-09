@@ -4,6 +4,10 @@
 
 *) Get the Unit tests working
 
+*) When you click on a photo, go to next
+
+*) Add swipe left/right on images (save history here)
+
 *) Find a better number and time chooser
 
 *) Investigate transitions between images
