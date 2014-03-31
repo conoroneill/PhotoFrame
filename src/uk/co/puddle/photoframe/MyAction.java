@@ -11,6 +11,12 @@ public enum MyAction {
     /** Normal snooze alarm */
     SNOOZE_SCREEN ("uk.co.puddle.photoframe.SLEEP_SNOOZE_SCREEN_ACTION"),
 
+    /** Alarm has woken, now tell the rest of the app to re-wake */
+    WAKE_UP_OUR_COMPONENTS("uk.co.puddle.photoframe.SLEEP_WAKE_UP_OUR_COMPONENTS_ACTION"),
+    
+    /** Alarm has decided to snooze, so tell the rest of the app to snooze */
+    SNOOZE_OUR_COMPONENTS ("uk.co.puddle.photoframe.SLEEP_SNOOZE_OUR_COMPONENTS_ACTION"),
+
     /** Explicitly releasing all locks, eg cancelling the timers */
     RELEASE_LOCKS ("uk.co.puddle.photoframe.SLEEP_RELEASE_LOCKS"),
     

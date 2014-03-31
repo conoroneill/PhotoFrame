@@ -1,6 +1,5 @@
 *) Test screen rotation, and activity lifecycle/saving settings. F12 on emulator!
-
-*) Do proper full-screen for images
+LEFT=CTRL plus F11, or 9 (PgUp) on numeric keypad
 
 *) Get the Unit tests working
 

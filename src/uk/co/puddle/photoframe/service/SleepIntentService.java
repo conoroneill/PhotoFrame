@@ -85,9 +85,9 @@ public class SleepIntentService extends IntentService {
         Log.d(Logging.TAG, "doWakeUpScreen; acquired lock: " + wl.toString() + ", due to: " + triggeredByAction);
         Log.i(Logging.TAG, "doWakeUpScreen; acquired lock (" + triggeredByAction + ")");
         
-        Log.i(Logging.TAG, "doWakeUpScreen; sending broadcast intent: " + MyAction.WAKE_UP_SCREEN);
+        Log.i(Logging.TAG, "doWakeUpScreen; sending broadcast intent: " + MyAction.WAKE_UP_OUR_COMPONENTS);
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        Intent wakeIntent = new Intent(MyAction.WAKE_UP_SCREEN.getActionName());
+        Intent wakeIntent = new Intent(MyAction.WAKE_UP_OUR_COMPONENTS.getActionName());
         lbm.sendBroadcast(wakeIntent);
         
         //pm.wakeUp(SystemClock.uptimeMillis());
@@ -111,9 +111,9 @@ public class SleepIntentService extends IntentService {
         //PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         //pm.goToSleep(SystemClock.uptimeMillis());
         
-        Log.i(Logging.TAG, "doSnoozeScreen; sending broadcast intent: " + MyAction.SNOOZE_SCREEN);
+        Log.i(Logging.TAG, "doSnoozeScreen; sending broadcast intent: " + MyAction.SNOOZE_OUR_COMPONENTS);
         LocalBroadcastManager lbm = LocalBroadcastManager.getInstance(this);
-        Intent wakeIntent = new Intent(MyAction.SNOOZE_SCREEN.getActionName());
+        Intent wakeIntent = new Intent(MyAction.SNOOZE_OUR_COMPONENTS.getActionName());
         lbm.sendBroadcast(wakeIntent);
 
         //Toast.makeText(this, "SleepIntentService SNOOZE", Toast.LENGTH_SHORT).show();

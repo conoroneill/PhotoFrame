@@ -2,10 +2,8 @@ package uk.co.puddle.photoframe;
 
 import java.util.Locale;
 
-import uk.co.puddle.photoframe.R;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
 import uk.co.puddle.photoframe.prefs.SettingsActivity;
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -40,7 +38,9 @@ public class PhotoControlActivity extends FragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+        Log.d(Logging.TAG, "PhotoControlActivity; onSCreate...");
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.activity_sleep_control);
 
 		// Set up the action bar.
@@ -84,10 +84,54 @@ public class PhotoControlActivity extends FragmentActivity implements
 	}
 	
 	@Override
+	protected void onStart() {
+	    Log.d(Logging.TAG, "PhotoControlActivity; onStart...");
+	    super.onStart();
+	}
+
+	@Override
+	protected void onRestart() {
+	    Log.d(Logging.TAG, "PhotoControlActivity; onRestart...");
+	    super.onRestart();
+	}
+
+	@Override
+	protected void onResume() {
+	    // Now in the foreground
+	    Log.d(Logging.TAG, "PhotoControlActivity; onResume...");
+	    super.onResume();
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+	    Log.d(Logging.TAG, "PhotoControlActivity; onSaveInstanceState...");
+	    super.onSaveInstanceState(outState);
+	}
+
+	@Override
+	protected void onPause() {
+	    // No longer in the foreground
+	    Log.d(Logging.TAG, "PhotoControlActivity; onPause...");
+	    super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+	    Log.d(Logging.TAG, "PhotoControlActivity; onStop...");
+	    super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+	    Log.d(Logging.TAG, "PhotoActivity; onDestroy...");
+	    super.onDestroy();
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.sleep_control, menu);
-		return true;
+	    // Inflate the menu; this adds items to the action bar if it is present.
+	    getMenuInflater().inflate(R.menu.sleep_control, menu);
+	    return true;
 	}
 
 	@Override

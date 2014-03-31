@@ -7,6 +7,7 @@ import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
 import uk.co.puddle.photoframe.storage.Storage;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -20,6 +21,7 @@ import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -41,13 +43,11 @@ public class PhotoActivity extends Activity {
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.i(Logging.TAG, "PhotoActivity; onCreate...");
         super.onCreate(savedInstanceState);
 
-        // Make this use the whole screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
-                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        
+        setFullScreen();
+        monitorSystemVisibility();
         setContentView(R.layout.activity_view_photo);
         
         handler = new Handler();
@@ -61,13 +61,52 @@ public class PhotoActivity extends Activity {
         //Log.i(SleepLogging.TAG, "PhotoActivity; thumb: " + thumb);
         
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.i(Logging.TAG, "PhotoActivity; onRestoreInstanceState...");
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    private void setFullScreen() {
+        // Make this use the whole screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+                                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
     
+    private void hideStatusBar() {
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        uiOptions |= View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+        // Remember that you should never show the action bar if the
+        // status bar is hidden, so hide that too if necessary.
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.hide();
+        }
+    }
+    
+    private void monitorSystemVisibility() {
+        View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                // TODO Auto-generated method stub
+                boolean fullScreen = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) != 0;
+                boolean navBar = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0;
+                Log.i(Logging.TAG, "PhotoActivity; onSystemUiVisibilityChange: fullScreen: " + fullScreen + ", navBar: " + navBar);
+            }
+        });
+    }
     
     @Override
     protected void onStart() {
         Log.i(Logging.TAG, "PhotoActivity; onStart...");
         super.onStart();
-        
+
         pickupPrefs();
 
         refreshPhotos();
@@ -76,14 +115,14 @@ public class PhotoActivity extends Activity {
 
         startIntervalTimer();
     }
-    
+
     private void pickupPrefs() {
         String delaySecs = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DELAY_SECS, "10");
         Log.d(Logging.TAG, "PhotoActivity; delaySecs: " + delaySecs);
         tickerTimeout = Integer.parseInt(delaySecs) * 1000;
-        
-//        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
-//        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
+
+        //        boolean showRandom = SleepPrefs.getBooleanPrefFromSettings(this, SleepPrefs.PREF_DISPLAY_RANDOM, true);
+        //        photoOrder = showRandom ? PhotoOrder.RANDOM : PhotoOrder.SEQUENTIAL;
         String orderValue = MyPrefs.getStringPrefFromSettings(this, MyPrefs.PREF_DISPLAY_ORDER, "");
         photoOrder = PhotoOrder.fromValue(orderValue);
 
@@ -102,7 +141,7 @@ public class PhotoActivity extends Activity {
 
     @Override
     protected void onRestart() {
-        Log.d(Logging.TAG, "PhotoActivity; onRestart...");
+        Log.i(Logging.TAG, "PhotoActivity; onRestart...");
         super.onRestart();
     }
 
@@ -111,7 +150,14 @@ public class PhotoActivity extends Activity {
         // Now in the foreground
         Log.i(Logging.TAG, "PhotoActivity; onResume...");
         super.onResume();
+        hideStatusBar();
         setupBroadcastReceiver();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.i(Logging.TAG, "PhotoActivity; onSaveInstanceState...");
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -143,6 +189,7 @@ public class PhotoActivity extends Activity {
     }
     
     private void showPhoto(int num) {
+        hideStatusBar(); // hide this if someone had clicked on the screen previously...
         PhotoEntry photoEntry = images.get(num);
         Log.i(Logging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
@@ -230,12 +277,12 @@ public class PhotoActivity extends Activity {
                 MyAction action = MyAction.fromActionName(paramIntent.getAction());
                 Log.i(Logging.TAG, "PhotoActivity; onReceive: " + action);
                 switch (action) {
-                case WAKE_UP_SCREEN:
+                case WAKE_UP_OUR_COMPONENTS:
                     if (tickerRunnable == null) { // we must be currently paused
                         startIntervalTimer();
                     }
                     break;
-                case SNOOZE_SCREEN:
+                case SNOOZE_OUR_COMPONENTS:
                     stopIntervalTimer();
                     break;
                 default:
@@ -245,8 +292,8 @@ public class PhotoActivity extends Activity {
             }
         };
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(MyAction.WAKE_UP_SCREEN.getActionName());
-        intentFilter.addAction(MyAction.SNOOZE_SCREEN.getActionName());
+        intentFilter.addAction(MyAction.WAKE_UP_OUR_COMPONENTS.getActionName());
+        intentFilter.addAction(MyAction.SNOOZE_OUR_COMPONENTS.getActionName());
         lbm.registerReceiver(br, intentFilter);
     }
     
