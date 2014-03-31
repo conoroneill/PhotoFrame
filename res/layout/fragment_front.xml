@@ -19,13 +19,6 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/photoTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scrollbars="vertical"
-                android:text="" />
-
-            <TextView
                 android:id="@+id/recentPhotos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,5 +53,13 @@
                 android:layout_height="wrap_content"
                 android:text="@string/stop_front_button_label" />
                 <!-- style="?android:attr/buttonBarButtonStyle" -->
+                
+            <TextView
+                android:id="@+id/photoTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:text="" />
+
         <!--    </LinearLayout> -->
 </LinearLayout>

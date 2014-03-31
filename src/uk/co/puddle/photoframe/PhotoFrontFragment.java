@@ -154,8 +154,9 @@ public class PhotoFrontFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         List<PhotoEntry> list = RecentPhotos.getInstance().getRecentPhotos();
         sb.append("Found " + list.size() + " recent entries\n");
-        for (PhotoEntry photoEntry : list) {
-            sb.append(photoEntry.getTextOnScreen());
+        for (PhotoEntry image : list) {
+            //sb.append(image.getTextOnScreen());
+            sb.append(image.getBucketName()).append('/').append(image.getName());
             sb.append('\n');
         }
         recentPhotosTextView.setText(sb.toString());
