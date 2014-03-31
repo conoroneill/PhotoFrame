@@ -7,6 +7,7 @@ import uk.co.puddle.photoframe.alarms.RunningMode;
 import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.storage.RecentPhotos;
 import uk.co.puddle.photoframe.R;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ public class PhotoFrontFragment extends Fragment {
     private static final int NUM_START_PHOTOS_TO_LIST = 4;
     private static final int NUM_END_PHOTOS_TO_LIST   = 4;
 
+    private View rootView;
     private List<PhotoEntry> images;
 
     public PhotoFrontFragment() {
@@ -39,7 +41,7 @@ public class PhotoFrontFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         
-        View rootView = inflater.inflate(R.layout.fragment_front, container, false);
+        rootView = inflater.inflate(R.layout.fragment_front, container, false);
         hookupButtons(rootView);
         refreshPhotos();
         refreshTextWindow(rootView);
@@ -47,6 +49,38 @@ public class PhotoFrontFragment extends Fragment {
         return rootView;
     }
     
+    @Override
+    public void onStart() {
+        // TODO Auto-generated method stub
+        super.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshRecentPhotosWindow(rootView);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
     private void hookupButtons(final View rootView) {
         Button refreshButton = (Button)rootView.findViewById(R.id.refreshButton);
         refreshButton.setOnClickListener(new OnClickListener() {
@@ -113,6 +147,18 @@ public class PhotoFrontFragment extends Fragment {
         sb.append("Timers: Daily: " + enabledTime + "; Now: " + enabledNow);
         
         photoTextView.setText(sb.toString());
+    }
+
+    private void refreshRecentPhotosWindow(View rootView) {
+        TextView recentPhotosTextView = (TextView) rootView.findViewById(R.id.recentPhotos);
+        StringBuilder sb = new StringBuilder();
+        List<PhotoEntry> list = RecentPhotos.getInstance().getRecentPhotos();
+        sb.append("Found " + list.size() + " recent entries\n");
+        for (PhotoEntry photoEntry : list) {
+            sb.append(photoEntry.getTextOnScreen());
+            sb.append('\n');
+        }
+        recentPhotosTextView.setText(sb.toString());
     }
 
     private void showPhotos() {

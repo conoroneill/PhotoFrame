@@ -25,6 +25,13 @@
                 android:scrollbars="vertical"
                 android:text="" />
 
+            <TextView
+                android:id="@+id/recentPhotos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:text="" />
+
             <Button
                 android:id="@+id/refreshButton"
                 android:layout_width="wrap_content"

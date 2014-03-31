@@ -13,6 +13,7 @@ public class PhotoEntry {
     private String bucketName;
     private String bucketId;
     private String thumb;
+    private String textOnScreen;
     
     public String getName() {
         return name;
@@ -55,6 +56,13 @@ public class PhotoEntry {
     public PhotoEntry withThumb(String thumb) {
         this.thumb = thumb;
         return this;
+    }
+    
+    public String getTextOnScreen() {
+        return textOnScreen;
+    }
+    public void setTextOnScreen(String textOnScreen) {
+        this.textOnScreen = textOnScreen;
     }
     
     public String getFormattedDate() {

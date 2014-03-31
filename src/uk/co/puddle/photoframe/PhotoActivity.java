@@ -6,6 +6,7 @@ import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
+import uk.co.puddle.photoframe.storage.RecentPhotos;
 import uk.co.puddle.photoframe.storage.Storage;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -189,7 +190,10 @@ public class PhotoActivity extends Activity {
     }
     
     private void showPhoto(int num) {
-        hideStatusBar(); // hide this if someone had clicked on the screen previously...
+        // If somebody has touched the screen, the nav bar will be shown.
+        // This clears it again next time we show a photo...
+        hideStatusBar();
+        
         PhotoEntry photoEntry = images.get(num);
         Log.i(Logging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
@@ -203,6 +207,9 @@ public class PhotoActivity extends Activity {
         String text = getPhotoText(photoEntry, num, images.size());
 //        text = text + " " + width + " x " + height;
         myImageViewText.setText(text);
+
+        photoEntry.setTextOnScreen(text);
+        RecentPhotos.getInstance().pushPhotoEntry(photoEntry);
     }
     
     private Bitmap getBitmapForView(ImageView imgView, PhotoEntry photoEntry) {
