@@ -1,5 +1,5 @@
-.settings
-bin
-gen
-libs
-*~
+.gradle
+.idea
+build
+gradle
+local.properties
