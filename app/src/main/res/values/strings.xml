@@ -84,7 +84,7 @@
     
     <!--  Help page -->
     <string name="help_activity_name">Help</string>
-    <string name="help_text1_content">Photo Frame, V1.0, Feb 2014</string>
+    <string name="help_text1_content">Photo Frame, V1.1, Jan 2015</string>
     <string name="help_text2_content">Written by Conor O\'Neill</string>
     <string name="help_text3_content">Published by Puddle Enterprises</string>
     <string name="help_text4_content">For further information, please visit:</string>
