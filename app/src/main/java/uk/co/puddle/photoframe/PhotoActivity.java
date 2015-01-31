@@ -193,8 +193,13 @@ public class PhotoActivity extends Activity {
         // If somebody has touched the screen, the nav bar will be shown.
         // This clears it again next time we show a photo...
         hideStatusBar();
-        
-        PhotoEntry photoEntry = images.get(num);
+
+        PhotoEntry photoEntry = null;
+        if (currentPhoto < images.size()) {
+            photoEntry = images.get(num);
+        } else {
+            photoEntry = new PhotoEntry();
+        }
         Log.i(Logging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
         ImageView imgView = (ImageView)findViewById(R.id.imageView);

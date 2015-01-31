@@ -38,7 +38,7 @@ public class PhotoControlActivity extends FragmentActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        Log.d(Logging.TAG, "PhotoControlActivity; onSCreate...");
+        Log.d(Logging.TAG, "PhotoControlActivity; onCreate...");
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_sleep_control);

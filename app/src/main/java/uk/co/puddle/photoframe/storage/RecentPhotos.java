@@ -24,6 +24,9 @@ public class RecentPhotos {
     }
 
     public void pushPhotoEntry(PhotoEntry photoEntry) {
+        if (photoEntry.getName() == null) {
+            return;
+        }
         synchronized(photos) {
             int currentSize = photos.size();
             if (currentSize != 0) {
