@@ -29,7 +29,7 @@
                         android:id="@+id/endSleepTimePicker"
                         android:timePickerMode="spinner"
                         android:layout_width="wrap_content"
-                        android:layout_height="120sp"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp" />
                     
                     <TextView
@@ -43,7 +43,7 @@
                         android:id="@+id/startSleepTimePicker"
                         android:timePickerMode="spinner"
                         android:layout_width="wrap_content"
-                        android:layout_height="120sp" />
+                        android:layout_height="wrap_content" />
 
             <LinearLayout
             android:id="@+id/dailyTimingsButtonPair"
