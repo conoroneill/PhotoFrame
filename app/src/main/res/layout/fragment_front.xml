@@ -26,53 +26,45 @@
                 android:text="" />
 
             <LinearLayout
-                android:id="@+id/frontTimingsButtonPair1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:buttonBarStyle"
-                android:orientation="horizontal" >
-                <Button
-                    android:id="@+id/stopFrontButton"
-                    android:layout_width="150sp"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:text="@string/stop_front_button_label" />
-                <Button
-                    android:id="@+id/refreshButton"
-                    android:layout_width="150sp"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:text="@string/refresh_button_label" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/frontTimingsButtonPair2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="?android:buttonBarStyle"
                 android:orientation="horizontal" >
                 <Button
-                    android:id="@+id/showPhotosButton"
-                    android:layout_width="150sp"
-                    android:layout_height="wrap_content"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:text="@string/show_photos_button_label" />
-                <Button
                     android:id="@+id/startfrontButton"
                     android:layout_width="150sp"
                     android:layout_height="wrap_content"
                     style="?android:attr/buttonBarButtonStyle"
                     android:text="@string/start_front_button_label" />
+                <Button
+                    android:id="@+id/showPhotosButton"
+                    android:layout_width="150sp"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:text="@string/show_photos_button_label" />
             </LinearLayout>
 
-        <!-- <LinearLayout
-            android:id="@+id/frontTimingsButtonPair"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" > -->
+    <LinearLayout
+        android:id="@+id/frontTimingsButtonPair1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:buttonBarStyle"
+        android:orientation="horizontal" >
+        <Button
+            android:id="@+id/stopFrontButton"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/stop_front_button_label" />
+        <Button
+            android:id="@+id/refreshButton"
+            android:layout_width="150sp"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarButtonStyle"
+            android:text="@string/refresh_button_label" />
+    </LinearLayout>
 
-                <!-- style="?android:attr/buttonBarButtonStyle" -->
-                
             <TextView
                 android:id="@+id/photoTextView"
                 android:layout_width="wrap_content"

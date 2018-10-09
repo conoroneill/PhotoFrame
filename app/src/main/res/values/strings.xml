@@ -12,8 +12,8 @@
     <!-- Front page (tab) -->
     <string name="front_page_text">This is the front page</string>
     <string name="refresh_button_label">Refresh photos</string>
-    <string name="show_photos_button_label">Show photos &#8230;</string>
-    <string name="start_front_button_label">Show photos (using timers) &#8230;</string>
+    <string name="show_photos_button_label">Show photos  &#8230; (without timers)</string>
+    <string name="start_front_button_label">Show photos &#8230; (using timers)</string>
     <string name="stop_front_button_label">Stop all timers</string>
     
     <!--  Timer page -->
@@ -80,7 +80,7 @@
     </string-array>
     <string name="font_color_value_default">FFFF0000</string>
     <string name="pref_font_color_summary_pt1">Text Color is</string>
-    <string name="pref_font_color_summary_pt2"></string>
+    <string name="pref_font_color_summary_pt2"/>
     
     <!--  Help page -->
     <string name="help_activity_name">Help</string>
