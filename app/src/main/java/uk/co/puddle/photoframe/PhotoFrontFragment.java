@@ -122,14 +122,15 @@ public class PhotoFrontFragment extends Fragment {
         TextView photoTextView = (TextView) rootView.findViewById(R.id.photoTextView);
         //photoTextView.setText("This is some text\nThis is a second line");
         StringBuilder sb = new StringBuilder();
-        sb.append("Found " + images.size() + " photo entries\n");
+        sb.append("Found ").append(images.size()).append(" photo entries\n");
         int count = images.size();
         int fromStart = (count < NUM_START_PHOTOS_TO_LIST) ? count : NUM_START_PHOTOS_TO_LIST;
         int startEnd  = (count < NUM_END_PHOTOS_TO_LIST)   ? 0     : (count - NUM_END_PHOTOS_TO_LIST);
         if (startEnd < fromStart) { startEnd = fromStart; }
         for (int i = 0; i < fromStart; i++) {
             PhotoEntry image = images.get(i);
-            sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName());
+            sb.append(i).append("; ");
+            sb.append(image.getBucketName()).append('/').append(image.getName());
             //sb.append(' ').append(image.getData());
             sb.append('\n');
         }
@@ -137,14 +138,15 @@ public class PhotoFrontFragment extends Fragment {
             sb.append("... \n");
             for (int i = startEnd; i < count; i++) {
                 PhotoEntry image = images.get(i);
-                sb.append("" + i + "; " + image.getBucketName()).append('/').append(image.getName());
+                sb.append(i).append("; ");
+                sb.append(image.getBucketName()).append('/').append(image.getName());
                 //sb.append(' ').append(image.getData());
                 sb.append('\n');
             }
         }
         boolean enabledNow  = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_NOW_SLEEP, false);
         boolean enabledTime = MyPrefs.getBooleanPref(getActivity(), MyPrefs.PREF_ENABLE_TIMED_SLEEP, false);
-        sb.append("Timers: Daily: " + enabledTime + "; Now: " + enabledNow);
+        sb.append("Timers: Daily: ").append(enabledTime).append("; Now: ").append(enabledNow);
         
         photoTextView.setText(sb.toString());
     }
@@ -153,11 +155,14 @@ public class PhotoFrontFragment extends Fragment {
         TextView recentPhotosTextView = (TextView) rootView.findViewById(R.id.recentPhotos);
         StringBuilder sb = new StringBuilder();
         List<PhotoEntry> list = RecentPhotos.getInstance().getRecentPhotos();
-        sb.append("Found " + list.size() + " recent entries\n");
+        int count = 1;
+        sb.append("Found ").append(list.size()).append(" recent entries\n");
         for (PhotoEntry image : list) {
             //sb.append(image.getTextOnScreen());
+            sb.append(count).append("; ");
             sb.append(image.getBucketName()).append('/').append(image.getName());
             sb.append('\n');
+            count++;
         }
         recentPhotosTextView.setText(sb.toString());
     }
