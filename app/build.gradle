@@ -6,8 +6,9 @@ android {
 
     defaultConfig {
         applicationId "uk.co.puddle.photoframe"
-        minSdkVersion 14
+        minSdkVersion 21
         targetSdkVersion 21
+//        11 is HONEYCOMB, (3.0), 16 is JELLY BEAN (4.1), 21 is Lollipop (5.0)
     }
 
     buildTypes {
@@ -19,5 +20,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.0'
+    implementation 'com.android.support:support-v4:21.0.3'
 }

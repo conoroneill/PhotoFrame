@@ -4,9 +4,6 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="16" /> <!--  11 is HONEYCOMB, (3.0), 16 is JELLY BEAN (4.1) -->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <!--  <uses-permission android:name="android.permission.DEVICE_POWER"/> -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
