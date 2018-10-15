@@ -84,10 +84,13 @@
     
     <!--  Help page -->
     <string name="help_activity_name">Help</string>
-    <string name="help_text1_content">Photo Frame, V1.1, Jan 2015</string>
+    <string name="help_text1_content">Photo Frame, V1.2, Oct 2018</string>
     <string name="help_text2_content">Written by Conor O\'Neill</string>
     <string name="help_text3_content">Published by Puddle Enterprises</string>
     <string name="help_text4_content">For further information, please visit:</string>
     <string name="help_url_content">www.puddleenterprises.com</string>
-    
+    <string name="help_text5_content">Hints for a successful installation:</string>
+    <string name="help_text6_content">* Turn off screen lock</string>
+    <string name="help_text7_content">* Set display sleep time to minimum (eg 15 secs); the app will automatically keep the screen on for the specified \'wake\' times</string>
+
 </resources>

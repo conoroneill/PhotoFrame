@@ -47,4 +47,22 @@
                 android:autoLink="web"
                 android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/help_text5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_text5_content"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/help_text6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_text6_content"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/help_text7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/help_text7_content"
+        android:textSize="20sp" />
 </LinearLayout>
