@@ -35,17 +35,20 @@ public class MyNotifications {
         // In this sample, we'll use the same text for the ticker and the expanded notification
         CharSequence text = context.getText(R.string.local_service_started);
 
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.pictures_icon_128, text,
-                System.currentTimeMillis());
-
         // The PendingIntent to launch our activity if the user selects this notification
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, PhotoControlActivity.class), 0);
 
+        // Set the icon, scrolling text and timestamp
         // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(context, context.getText(R.string.local_service_label),
-                       text, contentIntent);
+        Notification notification = new Notification.Builder(context)
+                .setWhen(System.currentTimeMillis())
+                .setSmallIcon(R.drawable.pictures_icon_128)
+                .setTicker(text)
+                .setContentTitle(context.getText(R.string.local_service_label))
+                .setContentText(text)
+                .setContentIntent(contentIntent)
+                .build();
 
         // Send the notification.
         nm.notify(NOTIFICATION, notification);

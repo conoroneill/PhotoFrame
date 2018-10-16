@@ -2,6 +2,7 @@ package uk.co.puddle.photoframe;
 
 import java.util.List;
 
+import uk.co.puddle.photoframe.photos.ImageRotator;
 import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
@@ -194,7 +195,7 @@ public class PhotoActivity extends Activity {
         // This clears it again next time we show a photo...
         hideStatusBar();
 
-        PhotoEntry photoEntry = null;
+        PhotoEntry photoEntry;
         if (currentPhoto < images.size()) {
             photoEntry = images.get(num);
         } else {
@@ -205,7 +206,8 @@ public class PhotoActivity extends Activity {
         ImageView imgView = (ImageView)findViewById(R.id.imageView);
         
 //        Bitmap bitmap = BitmapFactory.decodeFile(photoEntry.getData());
-        Bitmap bitmap = getBitmapForView(imgView, photoEntry);
+        Bitmap bitmap = getBitmapForView(photoEntry);
+        bitmap = ImageRotator.rotateImageIfRequired(bitmap, photoEntry);
         imgView.setImageBitmap(bitmap);
 
         TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
@@ -217,7 +219,7 @@ public class PhotoActivity extends Activity {
         RecentPhotos.getInstance().pushPhotoEntry(photoEntry);
     }
     
-    private Bitmap getBitmapForView(ImageView imgView, PhotoEntry photoEntry) {
+    private Bitmap getBitmapForView(PhotoEntry photoEntry) {
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         int height = metrics.heightPixels;

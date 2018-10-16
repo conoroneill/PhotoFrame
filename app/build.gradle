@@ -1,7 +1,10 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+
+    // https://medium.com/androiddevelopers/picking-your-compilesdkversion-minsdkversion-targetsdkversion-a098a0341ebd
+
+    compileSdkVersion 25
 //    buildToolsVersion "21.1.2"
 
     defaultConfig {
@@ -20,5 +23,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.support:support-v4:21.0.3'
+    implementation 'com.android.support:support-v4:25.4.0'
+    implementation 'com.android.support:exifinterface:25.4.0'
 }
