@@ -1,16 +1,11 @@
 package uk.co.puddle.photoframe;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import uk.co.puddle.photoframe.photos.ImageRotator;
+import uk.co.puddle.photoframe.photos.PhotoCollection;
 import uk.co.puddle.photoframe.photos.PhotoEntry;
 import uk.co.puddle.photoframe.photos.PhotoOrder;
-import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
 import uk.co.puddle.photoframe.storage.RecentPhotos;
-import uk.co.puddle.photoframe.storage.Storage;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -32,13 +27,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PhotoActivity extends Activity {
-    
-    private List<PhotoEntry> images;
+
+    private PhotoCollection photoCollection;
     private PhotoOrder photoOrder = PhotoOrder.RANDOM;
-    private int currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
-    private Map<String, Integer> firstImageInBucket;
-    private Map<String, Integer> lastImageInBucket;
-    private String currentBucketId = null;
 
     private Handler handler;
     private Runnable tickerRunnable = null;
@@ -117,8 +108,8 @@ public class PhotoActivity extends Activity {
         pickupPrefs();
 
         refreshPhotos();
-        nextPhotoNumber();
-        showPhoto(currentPhoto);
+        photoCollection.nextPhotoNumber();
+        showPhoto(photoCollection.getCurrentPhoto());
 
         startIntervalTimer();
     }
@@ -189,23 +180,7 @@ public class PhotoActivity extends Activity {
     }
 
     private void refreshPhotos() {
-        images = new PhotoReader().list(this);
-        //currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
-        currentPhoto = new Storage().getIntProperty(this, Storage.CURRENT_SEQ_KEY, -1);
-        clipSequenceToRange();
-
-        firstImageInBucket = new HashMap<>();
-        lastImageInBucket = new HashMap<>();
-        for (int imageNumber = 0; imageNumber < images.size(); imageNumber++) {
-            PhotoEntry image = images.get(imageNumber);
-            String bucketId = image.getBucketId();
-            Integer first = firstImageInBucket.get(bucketId);
-            if (first == null) {
-                firstImageInBucket.put(bucketId, imageNumber);
-            }
-            lastImageInBucket.put(bucketId, imageNumber);
-        }
-        currentBucketId = null;
+        photoCollection = new PhotoCollection(this, photoOrder);
     }
     
     private void showPhoto(int num) {
@@ -213,12 +188,7 @@ public class PhotoActivity extends Activity {
         // This clears it again next time we show a photo...
         hideStatusBar();
 
-        PhotoEntry photoEntry;
-        if (currentPhoto < images.size()) {
-            photoEntry = images.get(num);
-        } else {
-            photoEntry = new PhotoEntry();
-        }
+        PhotoEntry photoEntry = photoCollection.getPhotoEntry(photoCollection.getCurrentPhoto());
         Log.i(Logging.TAG, "PhotoActivity; num: " + num + "; photoEntry: " + photoEntry);
         
         ImageView imgView = (ImageView)findViewById(R.id.imageView);
@@ -229,7 +199,7 @@ public class PhotoActivity extends Activity {
         imgView.setImageBitmap(bitmap);
 
         TextView myImageViewText = (TextView)findViewById(R.id.myImageViewText);
-        String text = getPhotoText(photoEntry, num, images.size());
+        String text = getPhotoText(photoEntry, num, photoCollection.getCount());
 //        text = text + " " + width + " x " + height;
         myImageViewText.setText(text);
 
@@ -361,50 +331,9 @@ public class PhotoActivity extends Activity {
     }
 
     private void nextPhoto() {
-        nextPhotoNumber();
-        showPhoto(currentPhoto);
+        photoCollection.nextPhotoNumber();
+        showPhoto(photoCollection.getCurrentPhoto());
         startIntervalTimer();
     }
 
-    private void nextPhotoNumber() {
-        switch (photoOrder) {
-        case SEQUENTIAL:
-            currentPhoto++;
-            clipSequenceToRange();
-            new Storage().saveIntProperty(this, Storage.CURRENT_SEQ_KEY, currentPhoto);
-            break;
-        case RANDOM:
-            double r = Math.random();
-            currentPhoto = (int)Math.floor(images.size() * r);
-            break;
-        case SEQUENTIAL_WITHIN_RANDOM_FOLDER:
-            if ((currentBucketId == null) || (currentPhoto == lastImageInBucket.get(currentBucketId))) {
-                double r2 = Math.random();
-                int photoWithinBucket = (int)Math.floor(images.size() * r2);
-                PhotoEntry image = images.get(photoWithinBucket);
-                currentBucketId = image.getBucketId();
-                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
-                        + "; chose item " + photoWithinBucket + "/" + images.size()
-                        + "; BucketId: " + currentBucketId + "; BucketName: " + image.getBucketName()
-                        );
-                currentPhoto = firstImageInBucket.get(currentBucketId);
-                int last = lastImageInBucket.get(currentBucketId);
-                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
-                        + "; first: " + currentPhoto + "; last: " + last
-                        + " (" + (last - currentPhoto + 1) + " in folder)");
-            } else {
-                currentPhoto++;
-                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
-                        + "; next: " + currentPhoto + "; last: " + lastImageInBucket.get(currentBucketId));
-                clipSequenceToRange();
-            }
-            new Storage().saveIntProperty(this, Storage.CURRENT_SEQ_KEY, currentPhoto);
-        }
-    }
-
-    private void clipSequenceToRange() {
-        if (currentPhoto < 0 || currentPhoto >= images.size()) {
-            currentPhoto = 0;
-        }
-    }
 }

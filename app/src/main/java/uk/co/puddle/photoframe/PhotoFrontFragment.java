@@ -4,7 +4,9 @@ import java.util.List;
 
 import uk.co.puddle.photoframe.alarms.Alarms;
 import uk.co.puddle.photoframe.alarms.RunningMode;
+import uk.co.puddle.photoframe.photos.PhotoCollection;
 import uk.co.puddle.photoframe.photos.PhotoEntry;
+import uk.co.puddle.photoframe.photos.PhotoOrder;
 import uk.co.puddle.photoframe.photos.PhotoReader;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
 import uk.co.puddle.photoframe.storage.RecentPhotos;
@@ -32,7 +34,7 @@ public class PhotoFrontFragment extends Fragment {
     private static final int NUM_END_PHOTOS_TO_LIST   = 4;
 
     private View rootView;
-    private List<PhotoEntry> images;
+    private PhotoCollection photoCollection;
 
     public PhotoFrontFragment() {
     }
@@ -115,20 +117,20 @@ public class PhotoFrontFragment extends Fragment {
     }
     
     private void refreshPhotos() {
-        images = new PhotoReader().list(getActivity());
+        photoCollection = new PhotoCollection(getActivity(), PhotoOrder.SEQUENTIAL);
     }
     
     private void refreshTextWindow(View rootView) {
         TextView photoTextView = (TextView) rootView.findViewById(R.id.photoTextView);
         //photoTextView.setText("This is some text\nThis is a second line");
         StringBuilder sb = new StringBuilder();
-        sb.append("Found ").append(images.size()).append(" photo entries\n");
-        int count = images.size();
+        sb.append("Found ").append(photoCollection.getCount()).append(" photo entries\n");
+        int count = photoCollection.getCount();
         int fromStart = (count < NUM_START_PHOTOS_TO_LIST) ? count : NUM_START_PHOTOS_TO_LIST;
         int startEnd  = (count < NUM_END_PHOTOS_TO_LIST)   ? 0     : (count - NUM_END_PHOTOS_TO_LIST);
         if (startEnd < fromStart) { startEnd = fromStart; }
         for (int i = 0; i < fromStart; i++) {
-            PhotoEntry image = images.get(i);
+            PhotoEntry image = photoCollection.getPhotoEntry(i);
             sb.append(i).append("; ");
             sb.append(image.getBucketName()).append('/').append(image.getName());
             //sb.append(' ').append(image.getData());
@@ -137,7 +139,7 @@ public class PhotoFrontFragment extends Fragment {
         if (fromStart < count) {
             sb.append("... \n");
             for (int i = startEnd; i < count; i++) {
-                PhotoEntry image = images.get(i);
+                PhotoEntry image = photoCollection.getPhotoEntry(i);
                 sb.append(i).append("; ");
                 sb.append(image.getBucketName()).append('/').append(image.getName());
                 //sb.append(' ').append(image.getData());
@@ -168,14 +170,14 @@ public class PhotoFrontFragment extends Fragment {
     }
 
     private void showPhotos() {
-        int count = images.size();
+        int count = photoCollection.getCount();
         Log.i(Logging.TAG, "SleepFrontFragment; starting show photos; count: " + count);
         
         Intent intent = new Intent(this.getActivity(), PhotoActivity.class);
         Bundle sendBundle = new Bundle();
         sendBundle.putInt("count", count);
         if (count > 0) {
-            PhotoEntry photoEntry = images.iterator().next();
+            PhotoEntry photoEntry = photoCollection.getPhotoEntry(0);
             sendBundle.putString("photo_data", photoEntry.getData());
             sendBundle.putString("photo_thumb", photoEntry.getThumb());
         }

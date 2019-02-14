@@ -17,9 +17,8 @@ LEFT=CTRL plus F11, or 9 (PgUp) on numeric keypad
 
 *) Dual (or even multi) 24-hour timers
 
-*) Add an auto restart on reboot, optional
-
 *) Double random sort order - random folder, then all within that folder, but random order
+   (I've now impemented the random folder/sequential within folder variant)
 
 *) Background thread to turn image into bitmap
 

@@ -1,7 +1,10 @@
 package uk.co.puddle.photoframe.photos;
 
+import android.support.annotation.NonNull;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -91,4 +94,15 @@ public class PhotoEntry {
         return sb.toString();
     }
 
+    public static class PhotoEntryFolderAndDateComparator implements Comparator<PhotoEntry> {
+        public int compare(@NonNull PhotoEntry p1, @NonNull PhotoEntry p2) {
+            // Sort by folderName (BucketName), then BucketId in case of duplicates,
+            // and then by date within that bucket
+            int bucketNameResult = p1.getBucketName().compareTo(p2.getBucketName());
+            if (bucketNameResult != 0) return bucketNameResult;
+            int bucketIdResult = p1.getBucketId().compareTo(p2.getBucketId());
+            if (bucketIdResult != 0) return bucketIdResult;
+            return p1.getDate().compareTo(p2.getDate());
+        }
+    }
 }
