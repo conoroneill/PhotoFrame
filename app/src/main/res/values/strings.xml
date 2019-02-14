@@ -53,10 +53,12 @@
     <string-array name="display_order_labels">
         <item>Sequential</item>
         <item>Random</item>
+        <item>Sequential within Random Folder</item>
     </string-array>
     <string-array name="display_order_values">
         <item>SEQUENTIAL</item>
         <item>RANDOM</item>
+        <item>SEQUENTIAL_WITHIN_RANDOM_FOLDER</item>
     </string-array>
     <string name="display_order_value_default">RANDOM</string>
     <string name="pref_display_order_summary_pt1">Currently using</string>

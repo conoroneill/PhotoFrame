@@ -1,6 +1,8 @@
 package uk.co.puddle.photoframe;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import uk.co.puddle.photoframe.photos.ImageRotator;
 import uk.co.puddle.photoframe.photos.PhotoEntry;
@@ -34,7 +36,10 @@ public class PhotoActivity extends Activity {
     private List<PhotoEntry> images;
     private PhotoOrder photoOrder = PhotoOrder.RANDOM;
     private int currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
-    
+    private Map<String, Integer> firstImageInBucket;
+    private Map<String, Integer> lastImageInBucket;
+    private String currentBucketId = null;
+
     private Handler handler;
     private Runnable tickerRunnable = null;
     
@@ -188,6 +193,19 @@ public class PhotoActivity extends Activity {
         //currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
         currentPhoto = new Storage().getIntProperty(this, Storage.CURRENT_SEQ_KEY, -1);
         clipSequenceToRange();
+
+        firstImageInBucket = new HashMap<>();
+        lastImageInBucket = new HashMap<>();
+        for (int imageNumber = 0; imageNumber < images.size(); imageNumber++) {
+            PhotoEntry image = images.get(imageNumber);
+            String bucketId = image.getBucketId();
+            Integer first = firstImageInBucket.get(bucketId);
+            if (first == null) {
+                firstImageInBucket.put(bucketId, imageNumber);
+            }
+            lastImageInBucket.put(bucketId, imageNumber);
+        }
+        currentBucketId = null;
     }
     
     private void showPhoto(int num) {
@@ -359,6 +377,28 @@ public class PhotoActivity extends Activity {
             double r = Math.random();
             currentPhoto = (int)Math.floor(images.size() * r);
             break;
+        case SEQUENTIAL_WITHIN_RANDOM_FOLDER:
+            if ((currentBucketId == null) || (currentPhoto == lastImageInBucket.get(currentBucketId))) {
+                double r2 = Math.random();
+                int photoWithinBucket = (int)Math.floor(images.size() * r2);
+                PhotoEntry image = images.get(photoWithinBucket);
+                currentBucketId = image.getBucketId();
+                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
+                        + "; chose item " + photoWithinBucket + "/" + images.size()
+                        + "; BucketId: " + currentBucketId + "; BucketName: " + image.getBucketName()
+                        );
+                currentPhoto = firstImageInBucket.get(currentBucketId);
+                int last = lastImageInBucket.get(currentBucketId);
+                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
+                        + "; first: " + currentPhoto + "; last: " + last
+                        + " (" + (last - currentPhoto + 1) + " in folder)");
+            } else {
+                currentPhoto++;
+                Log.d(Logging.TAG, "PhotoActivity; SEQUENTIAL_WITHIN_RANDOM_FOLDER"
+                        + "; next: " + currentPhoto + "; last: " + lastImageInBucket.get(currentBucketId));
+                clipSequenceToRange();
+            }
+            new Storage().saveIntProperty(this, Storage.CURRENT_SEQ_KEY, currentPhoto);
         }
     }
 
