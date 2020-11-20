@@ -31,44 +31,53 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     @Override
     public void onSharedPreferenceChanged(
             SharedPreferences sharedPreferences, String key) {
-        if (key.equals(MyPrefs.PREF_DELAY_SECS)) {
-            Preference delayPref = findPreference(key);
-            
-            String currentValue = sharedPreferences.getString(key, "");
-            String pt1 = getResources().getString(R.string.pref_delay_secs_summary_pt1);
-            String pt2 = getResources().getString(R.string.pref_delay_secs_summary_pt2);
-            String msg = pt1 + " " + currentValue + " " + pt2;
-            Log.d(Logging.TAG, msg);
-            delayPref.setSummary(msg);
-        } else if (key.equals(MyPrefs.PREF_DISPLAY_ORDER)) {
-            Preference orderPref = findPreference(key);
-            
-            String currentValue = sharedPreferences.getString(key, "");
-            String currentLabel = getCurrentOrderLabel(currentValue);
-            String pt1 = getResources().getString(R.string.pref_display_order_summary_pt1);
-            String pt2 = getResources().getString(R.string.pref_display_order_summary_pt2);
-            String msg = pt1 + " " + currentLabel + " " + pt2;
-            Log.d(Logging.TAG, msg);
-            orderPref.setSummary(msg);
-        } else if (key.equals(MyPrefs.PREF_FONT_SIZE)) {
-            Preference fontSizePref = findPreference(key);
-            
-            String currentValue = sharedPreferences.getString(key, "");
-            String pt1 = getResources().getString(R.string.pref_text_font_size_summary_pt1);
-            String pt2 = getResources().getString(R.string.pref_text_font_size_summary_pt2);
-            String msg = pt1 + " " + currentValue + " " + pt2;
-            Log.d(Logging.TAG, msg);
-            fontSizePref.setSummary(msg);
-        } else if (key.equals(MyPrefs.PREF_FONT_COLOR)) {
-            Preference colorPref = findPreference(key);
-            
-            String currentValue = sharedPreferences.getString(key, "");
-            String currentLabel = getCurrentColorLabel(currentValue);
-            String pt1 = getResources().getString(R.string.pref_font_color_summary_pt1);
-            String pt2 = getResources().getString(R.string.pref_font_color_summary_pt2);
-            String msg = pt1 + " " + currentLabel + " " + pt2;
-            Log.d(Logging.TAG, msg);
-            colorPref.setSummary(msg);
+        switch (key) {
+            case MyPrefs.PREF_DELAY_SECS: {
+                Preference delayPref = findPreference(key);
+
+                String currentValue = sharedPreferences.getString(key, "");
+                String pt1 = getResources().getString(R.string.pref_delay_secs_summary_pt1);
+                String pt2 = getResources().getString(R.string.pref_delay_secs_summary_pt2);
+                String msg = pt1 + " " + currentValue + " " + pt2;
+                Log.d(Logging.TAG, msg);
+                delayPref.setSummary(msg);
+                break;
+            }
+            case MyPrefs.PREF_DISPLAY_ORDER: {
+                Preference orderPref = findPreference(key);
+
+                String currentValue = sharedPreferences.getString(key, "");
+                String currentLabel = getCurrentOrderLabel(currentValue);
+                String pt1 = getResources().getString(R.string.pref_display_order_summary_pt1);
+                String pt2 = getResources().getString(R.string.pref_display_order_summary_pt2);
+                String msg = pt1 + " " + currentLabel + " " + pt2;
+                Log.d(Logging.TAG, msg);
+                orderPref.setSummary(msg);
+                break;
+            }
+            case MyPrefs.PREF_FONT_SIZE: {
+                Preference fontSizePref = findPreference(key);
+
+                String currentValue = sharedPreferences.getString(key, "");
+                String pt1 = getResources().getString(R.string.pref_text_font_size_summary_pt1);
+                String pt2 = getResources().getString(R.string.pref_text_font_size_summary_pt2);
+                String msg = pt1 + " " + currentValue + " " + pt2;
+                Log.d(Logging.TAG, msg);
+                fontSizePref.setSummary(msg);
+                break;
+            }
+            case MyPrefs.PREF_FONT_COLOR: {
+                Preference colorPref = findPreference(key);
+
+                String currentValue = sharedPreferences.getString(key, "");
+                String currentLabel = getCurrentColorLabel(currentValue);
+                String pt1 = getResources().getString(R.string.pref_font_color_summary_pt1);
+                String pt2 = getResources().getString(R.string.pref_font_color_summary_pt2);
+                String msg = pt1 + " " + currentLabel + " " + pt2;
+                Log.d(Logging.TAG, msg);
+                colorPref.setSummary(msg);
+                break;
+            }
         }
     }
     

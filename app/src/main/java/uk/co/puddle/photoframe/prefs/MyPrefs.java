@@ -32,8 +32,7 @@ public class MyPrefs {
     
     public static RunningMode getCurrentRunningMode(Context context) {
         int runningMode = getIntPref(context, PREF_RUNNING_MODE, RunningMode.STOPPED.getStorageValue());
-        RunningMode currentRunningMode = RunningMode.fromStorageValue(runningMode);
-        return currentRunningMode;
+        return RunningMode.fromStorageValue(runningMode);
     }
 
     public static int getIntPref(Context context, String prefName, int defaultValue) {
@@ -45,7 +44,7 @@ public class MyPrefs {
         SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(prefName, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static boolean getBooleanPref(Context context, String prefName, boolean defaultValue) {
@@ -57,7 +56,7 @@ public class MyPrefs {
         SharedPreferences sharedPref = context.getSharedPreferences(MyPrefs.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(prefName, value);
-        editor.commit();
+        editor.apply();
     }
 
     public static String getStringPrefFromSettings(Context context, String prefName, String defaultValue) {
