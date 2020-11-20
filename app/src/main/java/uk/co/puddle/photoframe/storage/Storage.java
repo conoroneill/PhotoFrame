@@ -56,25 +56,17 @@ public class Storage {
     
     private Properties load(Context context) throws IOException {
         Properties properties = new Properties();
-        FileInputStream in = null;
-        try {
-            in = context.openFileInput(FILENAME);
+        try (FileInputStream in = context.openFileInput(FILENAME)) {
             properties.load(in);
         } catch (FileNotFoundException e) {
             Log.i(Logging.TAG, "Storage; load; failed with: " + e.toString() + "; assuming first time through, continue anyway");
-        } finally {
-            if (in != null) { in.close(); }
         }
         return properties;
     }
 
     private void save(Context context, Properties properties) throws IOException {
-        FileOutputStream out = null;
-        try {
-            out = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+        try (FileOutputStream out = context.openFileOutput(FILENAME, Context.MODE_PRIVATE)) {
             properties.store(out, "");
-        } finally {
-            if (out != null) { out.close(); }
         }
     }
 }

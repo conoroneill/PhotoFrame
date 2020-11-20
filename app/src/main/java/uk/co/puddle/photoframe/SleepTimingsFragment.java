@@ -3,7 +3,6 @@ package uk.co.puddle.photoframe;
 import uk.co.puddle.photoframe.alarms.Alarms;
 import uk.co.puddle.photoframe.alarms.RunningMode;
 import uk.co.puddle.photoframe.prefs.MyPrefs;
-import uk.co.puddle.photoframe.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;

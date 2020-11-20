@@ -14,27 +14,23 @@ public class PhotoReader {
     /* Checks if external storage is available to at least read */
     public boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state) ||
-            Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
-            return true;
-        }
-        return false;
+        return Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
     
     public List<PhotoEntry> list(Context context) {
         boolean readable = isExternalStorageReadable();
         if (!readable) {
             Log.i(Logging.TAG, "PhotoReader: readable: " + readable + "; no images");
-            return new ArrayList<PhotoEntry>();
+            return new ArrayList<>();
         }
         File dir = Environment.getExternalStorageDirectory();
         Log.d(Logging.TAG, "PhotoReader: externalDirName: dir: " + dir);
         listSubDir(Environment.DIRECTORY_PICTURES);
         listSubDir(Environment.DIRECTORY_MUSIC);
         listSubDir(Environment.DIRECTORY_DCIM);
-        
-        List<PhotoEntry> images = PhotoHelper1.getCameraImages(context);
-        return images;
+
+        return PhotoHelper1.getCameraImages(context);
     }
 
     private void listSubDir(String subDirName) {

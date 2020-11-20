@@ -126,7 +126,7 @@ public class PhotoFrontFragment extends Fragment {
         StringBuilder sb = new StringBuilder();
         sb.append("Found ").append(photoCollection.getCount()).append(" photo entries\n");
         int count = photoCollection.getCount();
-        int fromStart = (count < NUM_START_PHOTOS_TO_LIST) ? count : NUM_START_PHOTOS_TO_LIST;
+        int fromStart = Math.min(count, NUM_START_PHOTOS_TO_LIST);
         int startEnd  = (count < NUM_END_PHOTOS_TO_LIST)   ? 0     : (count - NUM_END_PHOTOS_TO_LIST);
         if (startEnd < fromStart) { startEnd = fromStart; }
         for (int i = 0; i < fromStart; i++) {

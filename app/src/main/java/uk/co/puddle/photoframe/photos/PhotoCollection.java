@@ -13,13 +13,13 @@ import uk.co.puddle.photoframe.storage.Storage;
 
 public class PhotoCollection {
 
-    private Context context;
-    private List<PhotoEntry> images;
-    private PhotoOrder photoOrder = PhotoOrder.RANDOM;
-    private int currentPhoto = -1; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
-    private Map<String, Integer> firstImageInBucket;
-    private Map<String, Integer> lastImageInBucket;
-    private String currentBucketId = null;
+    private final Context context;
+    private final List<PhotoEntry> images;
+    private final PhotoOrder photoOrder;
+    private int currentPhoto; // means that PhotoOrder.SEQUENTIAL will move to zero first time through
+    private final Map<String, Integer> firstImageInBucket;
+    private final Map<String, Integer> lastImageInBucket;
+    private String currentBucketId;
 
     public PhotoCollection(Context context, PhotoOrder photoOrder) {
         this.context = context;

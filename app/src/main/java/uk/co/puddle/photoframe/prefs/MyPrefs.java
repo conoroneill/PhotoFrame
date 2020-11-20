@@ -65,9 +65,9 @@ public class MyPrefs {
         return sharedPref.getString(prefName, defaultValue);
     }
 
-    public static boolean getBooleanPrefFromSettings(Context context, String prefName, boolean defaultValue) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPref.getBoolean(prefName, defaultValue);
-    }
+//    public static boolean getBooleanPrefFromSettings(Context context, String prefName, boolean defaultValue) {
+//        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+//        return sharedPref.getBoolean(prefName, defaultValue);
+//    }
 
 }

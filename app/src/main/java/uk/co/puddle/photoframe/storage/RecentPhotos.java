@@ -14,7 +14,7 @@ public class RecentPhotos {
         private static final RecentPhotos instance = new RecentPhotos();
     }
     
-    private List<PhotoEntry> photos = Collections.synchronizedList(new LinkedList<PhotoEntry>());
+    private final List<PhotoEntry> photos = Collections.synchronizedList(new LinkedList<PhotoEntry>());
     
     private RecentPhotos() {
     }
@@ -48,6 +48,6 @@ public class RecentPhotos {
     }
     
     public List<PhotoEntry> getRecentPhotos() {
-        return new LinkedList<PhotoEntry>(photos);
+        return new LinkedList<>(photos);
     }
 }

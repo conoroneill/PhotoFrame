@@ -32,7 +32,7 @@ public enum MyAction {
 
     private final String actionName;
     
-    private MyAction(String actionName) {
+    MyAction(String actionName) {
         this.actionName = actionName;
     }
     

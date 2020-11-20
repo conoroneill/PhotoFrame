@@ -45,9 +45,9 @@ public class PhotoHelper1 {
         return useAllImages;
     }
 
-    public static void setUseAllImages(boolean useAllImages) {
-        PhotoHelper1.useAllImages = useAllImages;
-    }
+//    public static void setUseAllImages(boolean useAllImages) {
+//        PhotoHelper1.useAllImages = useAllImages;
+//    }
 
     public static List<PhotoEntry> getCameraImages(Context context) {
         List<PhotoEntry> images;
@@ -82,7 +82,7 @@ public class PhotoHelper1 {
                 selection, // can be null, meaning all (http://stackoverflow.com/questions/3020478/android-list-all-images-available/3021018#3021018)
                 selectionArgs, // can be null if selection is null
                 null);
-        List<PhotoEntry> result = new ArrayList<PhotoEntry>(cursor.getCount());
+        List<PhotoEntry> result = new ArrayList<>(cursor.getCount());
         if (cursor.moveToFirst()) {
             final int dataColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             do {
@@ -109,7 +109,7 @@ public class PhotoHelper1 {
                 null, // can be null, meaning all (http://stackoverflow.com/questions/3020478/android-list-all-images-available/3021018#3021018)
                 null, // can be null if selection is null
                 null);
-        List<PhotoEntry> result = new ArrayList<PhotoEntry>(cursor.getCount());
+        List<PhotoEntry> result = new ArrayList<>(cursor.getCount());
         if (cursor.moveToFirst()) {
             final int dataColumn       = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             final int displayColumn    = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);

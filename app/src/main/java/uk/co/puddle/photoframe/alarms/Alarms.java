@@ -13,9 +13,9 @@ import android.util.Log;
 
 public class Alarms {
     
-    private static WakeAlarmReceiver   wakeAlarm   = new WakeAlarmReceiver();
-    private static SnoozeAlarmReceiver snoozeAlarm = new SnoozeAlarmReceiver();
-    private static MyNotifications  notifications = new MyNotifications();
+    private static final WakeAlarmReceiver   wakeAlarm   = new WakeAlarmReceiver();
+    private static final SnoozeAlarmReceiver snoozeAlarm = new SnoozeAlarmReceiver();
+    private static final MyNotifications  notifications = new MyNotifications();
 
     public static WakeAlarmReceiver getWakeAlarm() {
         return wakeAlarm;

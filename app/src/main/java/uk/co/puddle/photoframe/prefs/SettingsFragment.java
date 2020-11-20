@@ -73,8 +73,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
     
     private String getCurrentOrderLabel(String currentValue) {
-        String values[] = getResources().getStringArray(R.array.display_order_values);
-        String labels[] = getResources().getStringArray(R.array.display_order_labels);
+        String[] values = getResources().getStringArray(R.array.display_order_values);
+        String[] labels = getResources().getStringArray(R.array.display_order_labels);
         for (int i = 0; i < values.length; i++) {
             if (values[i].equals(currentValue)) { return labels[i]; }
         }
@@ -82,8 +82,8 @@ public class SettingsFragment extends PreferenceFragment implements OnSharedPref
     }
 
     private String getCurrentColorLabel(String currentValue) {
-        String values[] = getResources().getStringArray(R.array.font_color_values);
-        String labels[] = getResources().getStringArray(R.array.font_color_labels);
+        String[] values = getResources().getStringArray(R.array.font_color_values);
+        String[] labels = getResources().getStringArray(R.array.font_color_labels);
         for (int i = 0; i < values.length; i++) {
             if (values[i].equals(currentValue)) { return labels[i]; }
         }

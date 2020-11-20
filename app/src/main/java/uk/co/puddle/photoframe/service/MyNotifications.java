@@ -1,10 +1,5 @@
 package uk.co.puddle.photoframe.service;
 
-import uk.co.puddle.photoframe.Logging;
-import uk.co.puddle.photoframe.PhotoControlActivity;
-import uk.co.puddle.photoframe.R;
-import uk.co.puddle.photoframe.R.drawable;
-import uk.co.puddle.photoframe.R.string;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,11 +7,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import uk.co.puddle.photoframe.Logging;
+import uk.co.puddle.photoframe.PhotoControlActivity;
+import uk.co.puddle.photoframe.R;
+
 public class MyNotifications {
 
     // Unique Identification Number for the Notification.
     // We use it on Notification start, and to cancel it.
-    private int NOTIFICATION = R.string.local_service_started;
+    private final int NOTIFICATION = R.string.local_service_started;
 
     private NotificationManager nm;
     
